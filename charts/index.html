@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jsdom id retention — figures</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface: #fcfcfb;
+    --ink: #0b0b0b;
+    --ink2: #52514e;
+    --muted: #898781;
+    --rule: #e1e0d9;
+    --accent: #2a78d6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --surface: #1a1a19;
+      --ink: #ffffff;
+      --ink2: #c3c2b7;
+      --muted: #898781;
+      --rule: #2c2c2a;
+      --accent: #3987e5;
+    }
+  }
+  * { box-sizing: border-box }
+  body {
+    margin: 0; padding: 40px 20px 80px; background: var(--page); color: var(--ink);
+    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", "PingFang TC", "Noto Sans TC", sans-serif;
+  }
+  main { max-width: 820px; margin: 0 auto }
+  h1 { font-size: 22px; margin: 0 0 6px }
+  .sub { color: var(--ink2); margin: 0 0 4px }
+  .meta { color: var(--muted); font-size: 13px; margin: 0 0 28px }
+  a { color: var(--accent) }
+  figure { margin: 0 0 40px }
+  figure img { width: 100%; height: auto; display: block; border-radius: 8px }
+  figcaption { color: var(--ink2); font-size: 13.5px; margin-top: 10px }
+  details { margin-top: 10px; border-top: 1px solid var(--rule); padding-top: 10px }
+  summary { cursor: pointer; color: var(--muted); font-size: 13px }
+  table { border-collapse: collapse; width: 100%; margin-top: 10px; font-size: 13.5px }
+  th, td { text-align: left; padding: 5px 10px 5px 0; border-bottom: 1px solid var(--rule) }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums }
+  .bar { display: flex; gap: 8px; align-items: center; margin: 0 0 26px }
+  button {
+    font: inherit; font-size: 13px; padding: 5px 12px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--rule); background: var(--surface); color: var(--ink2);
+  }
+  button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff }
+  footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--rule); padding-top: 16px }
+  [hidden] { display: none !important }
+</style>
+</head>
+<body>
+<main>
+  <div class="bar">
+    <button id="en" aria-pressed="true">English</button>
+    <button id="zh" aria-pressed="false">繁體中文</button>
+  </div>
+
+  <h1 data-en="jsdom `id` attribute retention — figures" data-zh="jsdom id 屬性造成整份文件殘留 — 圖表"></h1>
+  <p class="sub" data-en="In jsdom ≥ 27, a document containing one element with an id attribute is retained in full. Still present in 30.0.1."
+     data-zh="在 jsdom ≥ 27，只要文件裡有一個帶 id 屬性的元素，整份文件就會被永久保留。到 30.0.1 仍然存在。"></p>
+  <p class="meta">macOS · Node v24.13.0 · Docker 29.5.2 · 2026-08-12 ·
+    <a href="../README.md" data-en="report" data-zh="報告" data-href-zh="../README.zh-TW.md" data-href-en="../README.md"></a> ·
+    <a href="../results/" data-en="raw output" data-zh="原始輸出"></a>
+  </p>
+
+  <figure>
+    <img id="f1" src="attribute-ablation.svg" alt="">
+    <figcaption data-en="Element type does not matter, position does not matter. class, data-* and name all sit at baseline — one element, two attributes, a factor of 230 between them."
+                data-zh="元素種類無關、位置也無關。class、data-*、name 都停在基準線——同一個元素上的兩個屬性，差了 230 倍。"></figcaption>
+    <details>
+      <summary data-en="Table view" data-zh="表格檢視"></summary>
+      <table><thead><tr><th data-en="Case" data-zh="案例"></th><th class="n">KB/call</th></tr></thead>
+      <tbody>
+        <tr><td>+ &lt;p id&gt;</td><td class="n">158.00</td></tr>
+        <tr><td>+ &lt;div id&gt;</td><td class="n">157.50</td></tr>
+        <tr><td>+ &lt;span id&gt;</td><td class="n">157.40</td></tr>
+        <tr><td data-en="+ &lt;div id&gt; first" data-zh="+ &lt;div id&gt; 放最前面"></td><td class="n">157.13</td></tr>
+        <tr><td>+ class</td><td class="n">0.68</td></tr>
+        <tr><td>+ name</td><td class="n">0.57</td></tr>
+        <tr><td data-en="baseline (no id)" data-zh="基準（無 id）"></td><td class="n">0.51</td></tr>
+        <tr><td>+ data-*</td><td class="n">0.41</td></tr>
+      </tbody></table>
+    </details>
+  </figure>
+
+  <figure>
+    <img id="f2" src="version-boundary.svg" alt="">
+    <figcaption data-en="26.1.0 is clean. The retention appears in 27.0.0 and is still there in 30.0.1. At 29.1.1 the no-id baseline drops back to 0.11 while the id case barely moves — upstream fixed the adjacent cost, not the retention."
+                data-zh="26.1.0 乾淨，缺陷從 27.0.0 進來，到 30.0.1 仍在。29.1.1 的無 id 基準掉回 0.11、有 id 的情況幾乎沒動——上游修的是旁邊那件事。"></figcaption>
+    <details>
+      <summary data-en="Table view" data-zh="表格檢視"></summary>
+      <table><thead><tr><th>jsdom</th><th class="n" data-en="no id" data-zh="無 id"></th><th class="n" data-en="one id" data-zh="有一個 id"></th></tr></thead>
+      <tbody>
+        <tr><td>26.1.0</td><td class="n">0.11</td><td class="n">0.35</td></tr>
+        <tr><td>27.0.0</td><td class="n">6.90</td><td class="n">181.09</td></tr>
+        <tr><td>28.1.0</td><td class="n">6.88</td><td class="n">189.73</td></tr>
+        <tr><td>29.1.1</td><td class="n">0.11</td><td class="n">161.14</td></tr>
+        <tr><td>30.0.1</td><td class="n">0.11</td><td class="n">161.14</td></tr>
+      </tbody></table>
+    </details>
+  </figure>
+
+  <figure>
+    <img id="f3" src="scaling.svg" alt="">
+    <figcaption data-en="Both panels share one y-axis. Retention tracks document size, not id count — a single id is a switch, not a dial."
+                data-zh="兩張圖共用同一條 y 軸。殘留跟著文件大小走，不跟著 id 數量走——一個 id 是開關，不是刻度。"></figcaption>
+    <details>
+      <summary data-en="Table view" data-zh="表格檢視"></summary>
+      <table><thead><tr><th data-en="Case" data-zh="案例"></th><th class="n">KB/call</th></tr></thead>
+      <tbody>
+        <tr><td data-en="10 paragraphs + 1 id" data-zh="10 段 + 1 個 id"></td><td class="n">51.83</td></tr>
+        <tr><td data-en="40 paragraphs + 1 id" data-zh="40 段 + 1 個 id"></td><td class="n">157.47</td></tr>
+        <tr><td data-en="160 paragraphs + 1 id" data-zh="160 段 + 1 個 id"></td><td class="n">579.68</td></tr>
+        <tr><td data-en="40 paragraphs + 20 ids" data-zh="40 段 + 20 個 id"></td><td class="n">231.31</td></tr>
+      </tbody></table>
+    </details>
+  </figure>
+
+  <figure>
+    <img id="f4" src="retainer-chain.svg" alt="">
+    <figcaption data-en="Walked back from a V8 heap snapshot to a GC root, skipping weak edges. Inferred from the retainer shape plus the fact that id is the sole trigger — not from reading jsdom's internals line by line."
+                data-zh="從 V8 heap snapshot 反向走訪回 GC root，過程中跳過 weak edge。這是從保留路徑的形狀加上「id 是唯一觸發條件」推出來的，不是逐行讀 jsdom 內部實作得到的。"></figcaption>
+  </figure>
+
+  <footer>
+    <p data-en="Every figure is generated from the committed run by charts/build.mjs. Reproduce with ./run-all.sh."
+       data-zh="所有圖表都由 charts/build.mjs 從 commit 在 repo 裡的那次執行產生。用 ./run-all.sh 可重跑。"></p>
+  </footer>
+</main>
+
+<script>
+  const apply = (lang) => {
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en'
+    for (const el of document.querySelectorAll('[data-en]')) {
+      el.textContent = el.dataset[lang]
+      if (el.dataset['href' + (lang === 'zh' ? 'Zh' : 'En')]) {
+        el.href = el.dataset['href' + (lang === 'zh' ? 'Zh' : 'En')]
+      }
+    }
+    const sfx = lang === 'zh' ? '.zh-TW' : ''
+    f1.src = `attribute-ablation${sfx}.svg`
+    f2.src = `version-boundary${sfx}.svg`
+    f3.src = `scaling${sfx}.svg`
+    f4.src = `retainer-chain${sfx}.svg`
+    for (const b of [en, zh]) b.setAttribute('aria-pressed', String(b.id === lang))
+  }
+  en.onclick = () => apply('en')
+  zh.onclick = () => apply('zh')
+  apply(navigator.language?.startsWith('zh') ? 'zh' : 'en')
+</script>
+</body>
+</html>

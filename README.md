@@ -76,7 +76,15 @@ own content.
 ## Results
 
 Retained heap per call in KB, after forced GC. Full tables for every version are
-in [RESULTS.md](RESULTS.md); the raw log is in [`results/`](results/).
+in [RESULTS.md](RESULTS.md); the raw log is in [`results/`](results/). The figures
+below are generated from that same run by [`charts/build.mjs`](charts/build.mjs) —
+open [`charts/index.html`](charts/index.html) for all four with table views.
+
+![One attribute decides it: on jsdom 30.0.1 the four id-bearing cases retain ~157 KB per parse while class, data-* and name sit under 0.7 KB](charts/attribute-ablation.svg)
+
+![jsdom 26.1.0 is clean; retention appears at 27.0.0 and is still present at 30.0.1](charts/version-boundary.svg)
+
+![Retention tracks document size, not id count](charts/scaling.svg)
 
 **The version boundary** (`01-minimal.mjs`, plain jsdom, no sanitizer):
 
@@ -158,6 +166,8 @@ Actual output, abridged — the full walk is in
 ```
 
 In shape:
+
+![GC roots hold the Window; a WeakMap keyed by that Window holds a Map keyed by id string, holding a Set of id-bearing elements, each retaining its whole document](charts/retainer-chain.svg)
 
 ```
 GC roots
@@ -295,6 +305,8 @@ node --expose-gc 01-minimal.mjs
 | `retainers.py` | walks a snapshot back to a GC root |
 | `lib/measure.mjs` | shared harness (forced GC, event-loop yields, warmup) |
 | `Dockerfile`, `run-all.sh` | version matrix |
+| `charts/build.mjs` | regenerates the figures from the committed run |
+| `charts/index.html` | all four figures with table views, EN/ZH |
 
 All fixtures are synthetic. No production content, configuration or identifiers
 appear anywhere in this repository.

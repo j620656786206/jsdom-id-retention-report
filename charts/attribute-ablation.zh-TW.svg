@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" width="760" height="400" role="img" aria-labelledby="t d">
+  <title id="t">一個屬性就決定漏不漏</title>
+  <desc id="d">每次解析的殘留（KB/call），jsdom 30.0.1. + &lt;p id&gt; 158; + &lt;div id&gt; 157.5; + &lt;span id&gt; 157.4; + &lt;div id&gt; first 157.13; + class 0.68; + name 0.57; baseline (no id) 0.51; + data-* 0.41</desc>
+  <style>
+    .s { fill: #fcfcfb }
+    .ink { fill: #0b0b0b }  .ink2 { fill: #52514e }
+    .muted { fill: #898781 }
+    .grid { stroke: #e1e0d9 }  .axis { stroke: #c3c2b7 }
+    .accent { fill: #2a78d6 }  .context { fill: #898781 }
+    .gap { stroke: #fcfcfb }
+    text { font-family: system-ui, -apple-system, "Segoe UI", "PingFang TC", "Noto Sans TC", sans-serif; }
+    .t   { font-size: 15px; font-weight: 600 }
+    .st  { font-size: 12.5px }
+    .lbl { font-size: 12px }
+    .val { font-size: 12px; font-weight: 600 }
+    .tick { font-size: 11px; font-variant-numeric: tabular-nums }
+    @media (prefers-color-scheme: dark) {
+      .s { fill: #1a1a19 }
+      .ink { fill: #ffffff }  .ink2 { fill: #c3c2b7 }
+      .muted { fill: #898781 }
+      .grid { stroke: #2c2c2a }  .axis { stroke: #383835 }
+      .accent { fill: #3987e5 }  .context { fill: #898781 }
+      .gap { stroke: #1a1a19 }
+    }
+  </style>
+  <rect width="760" height="400" rx="8" class="s"/>
+  <text x="24" y="30" class="t ink">一個屬性就決定漏不漏</text>
+  <text x="24" y="50" class="st ink2">每次解析的殘留（KB/call），jsdom 30.0.1</text>
+  <rect x="546" y="22" width="10" height="10" rx="2" class="accent"/>
+  <text x="561" y="31" class="lbl ink2">帶 id</text>
+  <rect x="624" y="22" width="10" height="10" rx="2" class="context"/>
+  <text x="639" y="31" class="lbl ink2">對照組</text>
+  <text x="736" y="388" class="tick muted" text-anchor="end">KB/call</text>
+  <line x1="168" y1="74" x2="168" y2="360" class="grid" stroke-width="1"/>
+  <text x="168" y="378" class="tick muted" text-anchor="middle">0</text>
+  <line x1="241.71428571428572" y1="74" x2="241.71428571428572" y2="360" class="grid" stroke-width="1"/>
+  <text x="241.71428571428572" y="378" class="tick muted" text-anchor="middle">25</text>
+  <line x1="315.42857142857144" y1="74" x2="315.42857142857144" y2="360" class="grid" stroke-width="1"/>
+  <text x="315.42857142857144" y="378" class="tick muted" text-anchor="middle">50</text>
+  <line x1="389.1428571428571" y1="74" x2="389.1428571428571" y2="360" class="grid" stroke-width="1"/>
+  <text x="389.1428571428571" y="378" class="tick muted" text-anchor="middle">75</text>
+  <line x1="462.85714285714283" y1="74" x2="462.85714285714283" y2="360" class="grid" stroke-width="1"/>
+  <text x="462.85714285714283" y="378" class="tick muted" text-anchor="middle">100</text>
+  <line x1="536.5714285714286" y1="74" x2="536.5714285714286" y2="360" class="grid" stroke-width="1"/>
+  <text x="536.5714285714286" y="378" class="tick muted" text-anchor="middle">125</text>
+  <line x1="610.2857142857142" y1="74" x2="610.2857142857142" y2="360" class="grid" stroke-width="1"/>
+  <text x="610.2857142857142" y="378" class="tick muted" text-anchor="middle">150</text>
+  <line x1="684" y1="74" x2="684" y2="360" class="grid" stroke-width="1"/>
+  <text x="684" y="378" class="tick muted" text-anchor="middle">175</text>
+  <line x1="168" y1="74" x2="168" y2="360" class="axis" stroke-width="1"/>
+  <path d="M168,79.875h461.8742857142857a4,4 0 0 1 4,4v16a4,4 0 0 1 -4,4h-461.8742857142857z" class="accent"/>
+  <text x="158" y="95.875" class="lbl ink2" text-anchor="end">+ &lt;p id&gt;</text>
+  <text x="641.8742857142856" y="95.875" class="val ink">158.00</text>
+  <path d="M168,115.625h460.40000000000003a4,4 0 0 1 4,4v16a4,4 0 0 1 -4,4h-460.40000000000003z" class="accent"/>
+  <text x="158" y="131.625" class="lbl ink2" text-anchor="end">+ &lt;div id&gt;</text>
+  <text x="640.4000000000001" y="131.625" class="val ink">157.50</text>
+  <path d="M168,151.375h460.1051428571429a4,4 0 0 1 4,4v16a4,4 0 0 1 -4,4h-460.1051428571429z" class="accent"/>
+  <text x="158" y="167.375" class="lbl ink2" text-anchor="end">+ &lt;span id&gt;</text>
+  <text x="640.1051428571429" y="167.375" class="val ink">157.40</text>
+  <path d="M168,187.125h459.3090285714286a4,4 0 0 1 4,4v16a4,4 0 0 1 -4,4h-459.3090285714286z" class="accent"/>
+  <text x="158" y="203.125" class="lbl ink2" text-anchor="end">+ &lt;div id&gt; 放最前面</text>
+  <text x="639.3090285714286" y="203.125" class="val ink">157.13</text>
+  <path d="M168,222.875h0a2.005028571428572,2.005028571428572 0 0 1 2.005028571428572,2.005028571428572v19.989942857142857a2.005028571428572,2.005028571428572 0 0 1 -2.005028571428572,2.005028571428572h0z" class="context"/>
+  <text x="158" y="238.875" class="lbl ink2" text-anchor="end">+ class</text>
+  <text x="178.00502857142857" y="238.875" class="val ink">0.68</text>
+  <path d="M168,258.625h0a1.6806857142857141,1.6806857142857141 0 0 1 1.6806857142857141,1.6806857142857141v20.638628571428573a1.6806857142857141,1.6806857142857141 0 0 1 -1.6806857142857141,1.6806857142857141h0z" class="context"/>
+  <text x="158" y="274.625" class="lbl ink2" text-anchor="end">+ name</text>
+  <text x="177.68068571428572" y="274.625" class="val ink">0.57</text>
+  <path d="M168,294.375h0a1.5037714285714285,1.5037714285714285 0 0 1 1.5037714285714285,1.5037714285714285v20.99245714285714a1.5037714285714285,1.5037714285714285 0 0 1 -1.5037714285714285,1.5037714285714285h0z" class="context"/>
+  <text x="158" y="310.375" class="lbl ink2" text-anchor="end">基準（無 id）</text>
+  <text x="177.50377142857144" y="310.375" class="val ink">0.51</text>
+  <path d="M168,330.125h0a1.5,1.5 0 0 1 1.5,1.5v21a1.5,1.5 0 0 1 -1.5,1.5h0z" class="context"/>
+  <text x="158" y="346.125" class="lbl ink2" text-anchor="end">+ data-*</text>
+  <text x="177.5" y="346.125" class="val ink">0.41</text>
+
+</svg>

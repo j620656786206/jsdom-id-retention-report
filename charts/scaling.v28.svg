@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 380" width="760" height="380" role="img" aria-labelledby="t d">
+  <title id="t">id decides whether; size decides how much</title>
+  <desc id="d">Both panels share one y-axis (jsdom 28.1.0). Vary document size, hold id count at 1: 85.56, 186.49, 586.58. Vary id count, hold size at 40 paragraphs: 185.1, 256.14</desc>
+  <style>
+    .s { fill: #fcfcfb }
+    .ink { fill: #0b0b0b }  .ink2 { fill: #52514e }
+    .muted { fill: #898781 }
+    .grid { stroke: #e1e0d9 }  .axis { stroke: #c3c2b7 }
+    .accent { fill: #2a78d6 }  .context { fill: #898781 }
+    .gap { stroke: #fcfcfb }
+    text { font-family: system-ui, -apple-system, "Segoe UI", "PingFang TC", "Noto Sans TC", sans-serif; }
+    .t   { font-size: 15px; font-weight: 600 }
+    .st  { font-size: 12.5px }
+    .lbl { font-size: 12px }
+    .val { font-size: 12px; font-weight: 600 }
+    .tick { font-size: 11px; font-variant-numeric: tabular-nums }
+    @media (prefers-color-scheme: dark) {
+      .s { fill: #1a1a19 }
+      .ink { fill: #ffffff }  .ink2 { fill: #c3c2b7 }
+      .muted { fill: #898781 }
+      .grid { stroke: #2c2c2a }  .axis { stroke: #383835 }
+      .accent { fill: #3987e5 }  .context { fill: #898781 }
+      .gap { stroke: #1a1a19 }
+    }
+  </style>
+  <rect width="760" height="380" rx="8" class="s"/>
+  <text x="24" y="30" class="t ink">id decides whether; size decides how much</text>
+  <text x="24" y="50" class="st ink2">Both panels share one y-axis (jsdom 28.1.0)</text>
+  <text x="736" y="30" class="tick muted" text-anchor="end">KB/call</text>
+  <line x1="56" y1="324" x2="736" y2="324" class="grid" stroke-width="1"/>
+  <text x="46" y="328" class="tick muted" text-anchor="end">0</text>
+  <line x1="56" y1="249.33333333333334" x2="736" y2="249.33333333333334" class="grid" stroke-width="1"/>
+  <text x="46" y="253.33333333333334" class="tick muted" text-anchor="end">200</text>
+  <line x1="56" y1="174.66666666666669" x2="736" y2="174.66666666666669" class="grid" stroke-width="1"/>
+  <text x="46" y="178.66666666666669" class="tick muted" text-anchor="end">400</text>
+  <line x1="56" y1="100" x2="736" y2="100" class="grid" stroke-width="1"/>
+  <text x="46" y="104" class="tick muted" text-anchor="end">600</text>
+  <line x1="56" y1="324" x2="736" y2="324" class="axis" stroke-width="1"/>
+  <text x="72" y="74" class="st ink2">Vary document size, hold id count at 1</text>
+  <path d="M115,324v-27.9424a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v27.9424z" class="accent"/>
+  <text x="127" y="284.0576" class="val ink" text-anchor="middle">86</text>
+  <text x="127" y="344" class="lbl ink2" text-anchor="middle">10 para</text>
+  <path d="M225,324v-65.62293333333334a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v65.62293333333334z" class="accent"/>
+  <text x="237" y="246.37706666666668" class="val ink" text-anchor="middle">186</text>
+  <text x="237" y="344" class="lbl ink2" text-anchor="middle">40 para</text>
+  <path d="M335,324v-214.98986666666667a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v214.98986666666667z" class="accent"/>
+  <text x="347" y="97.01013333333333" class="val ink" text-anchor="middle">587</text>
+  <text x="347" y="344" class="lbl ink2" text-anchor="middle">160 para</text>
+  <text x="72" y="368" class="tick muted">4× the document → 3.1× the retention</text>
+  <line x1="428" y1="56" x2="428" y2="324" class="grid" stroke-width="1"/>
+  <text x="452" y="74" class="st ink2">Vary id count, hold size at 40 paragraphs</text>
+  <path d="M505,324v-65.104a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v65.104z" class="accent"/>
+  <text x="517" y="246.89600000000002" class="val ink" text-anchor="middle">185</text>
+  <text x="517" y="344" class="lbl ink2" text-anchor="middle">1 id</text>
+  <path d="M635,324v-91.6256a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v91.6256z" class="accent"/>
+  <text x="647" y="220.37439999999998" class="val ink" text-anchor="middle">256</text>
+  <text x="647" y="344" class="lbl ink2" text-anchor="middle">20 ids</text>
+  <text x="452" y="368" class="tick muted">20× the ids → only 1.4×</text>
+
+</svg>
