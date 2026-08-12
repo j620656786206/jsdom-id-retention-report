@@ -1,0 +1,48 @@
+# retainer chain, jsdom 28.1.0, after 120 parses of an id-bearing document
+#   node --expose-gc 04-heap-snapshot.mjs
+#   python3 retainers.py out/leak.heapsnapshot HTMLDivElementImpl 2
+#
+# heapUsed after the 120 parses: 55.3 MB
+# loading out/leak.heapsnapshot ...
+# nodes=643,545 edges=2,860,854
+# building reverse index ...
+# found HTMLDivElementImpl instances (showing 2)
+
+
+═══ retainer chain of HTMLDivElementImpl [object] sz=328 ═══
+   [synthetic] sz=0
+    --element:1-->
+  (GC roots) [synthetic] sz=0
+    --element:19-->
+  (Stack roots) [synthetic] sz=0
+    --internal:33-->
+  Window [object] sz=24
+    --internal:5 / part of key (Window @7235) -> value (Map @311695) pair in WeakMap (table @310159)-->
+  Map [object] sz=32
+    --internal:table-->
+   [array] sz=152
+    --internal:6-->
+  Set [object] sz=32
+    --internal:table-->
+   [array] sz=2600
+    --internal:83-->
+  HTMLDivElementImpl [object] sz=328
+
+═══ retainer chain of HTMLDivElementImpl [object] sz=328 ═══
+   [synthetic] sz=0
+    --element:1-->
+  (GC roots) [synthetic] sz=0
+    --element:19-->
+  (Stack roots) [synthetic] sz=0
+    --internal:33-->
+  Window [object] sz=24
+    --internal:5 / part of key (Window @7235) -> value (Map @311695) pair in WeakMap (table @310159)-->
+  Map [object] sz=32
+    --internal:table-->
+   [array] sz=152
+    --internal:6-->
+  Set [object] sz=32
+    --internal:table-->
+   [array] sz=2600
+    --internal:81-->
+  HTMLDivElementImpl [object] sz=328

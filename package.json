@@ -1,0 +1,19 @@
+{
+  "name": "jsdom-id-retention-report",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Reproduction: jsdom >=27 permanently retains any Document containing an element with an id attribute, when parsed from a long-lived Window.",
+  "scripts": {
+    "minimal": "node --expose-gc 01-minimal.mjs",
+    "ablation": "node --expose-gc 02-attribute-ablation.mjs",
+    "scaling": "node --expose-gc 03-scaling.mjs",
+    "snapshot": "node --expose-gc 04-heap-snapshot.mjs",
+    "matrix": "./run-all.sh"
+  },
+  "dependencies": {
+    "dompurify": "3.4.13",
+    "jsdom": "28.1.0"
+  }
+}
