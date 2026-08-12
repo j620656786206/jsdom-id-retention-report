@@ -1,8 +1,8 @@
 [English](README.md) · **繁體中文**
 
-# jsdom `id` 屬性導致的文件保留——記憶體洩漏報告
+# jsdom `id` 屬性造成整份文件殘留——記憶體洩漏報告
 
-> **在 jsdom ≥ 27，從一個長生命週期的 `Window` 解析出來的文件，只要裡面含有任何一個帶
+> **在 jsdom ≥ 27，從一個常駐的 `Window` 解析出來的文件，只要裡面含有任何一個帶
 > `id` 屬性的元素，整份文件就會被永久保留。** 到 30.0.1 仍然存在。
 
 以下每一個數字都由本 repo 的腳本實跑產生，該次執行的原始輸出 commit 在
@@ -15,7 +15,7 @@
 
 ## 為什麼這件事重要
 
-「一個長生命週期的 `Window`，加上許多短生命週期的 `Document`」正是 server 端 HTML
+「一個常駐的 `Window`，加上許多用完就丟的 `Document`」正是 server 端 HTML
 sanitizer 的標準形狀。建立 `Window` 的成本很高，所以每個 server 端的 wrapper 都會在模組
 載入時建一次，之後每一筆進來的內容都拿它來解析：
 
@@ -146,7 +146,7 @@ python3 retainers.py out/leak.heapsnapshot HTMLDivElementImpl
 
 ```
 GC roots
-  └─ Window                              （長生命週期，行程活著就不會釋放）
+  └─ Window                              （常駐，行程活著就不會釋放）
        └─ WeakMap[key = Window] → Map    （key 是 id 字串）
             └─ Set                       （具該 id 的元素集合）
                  └─ HTMLDivElementImpl → …整份文件
