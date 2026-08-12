@@ -110,8 +110,8 @@ open [`charts/index.html`](charts/index.html) for all four with table views.
 | control: `+ name` | 0.57 |
 
 Element type does not matter, position does not matter, and the other three
-attributes sit at baseline — one element, two attributes, a factor of 230
-between them.
+attributes sit at baseline. On the same element, a `class` costs 0.68 KB/call
+and an `id` costs 157.50 — a factor of 230 between two attributes.
 
 **One `id` pins the whole document** (`03-scaling.mjs`, jsdom 30.0.1):
 
@@ -248,7 +248,9 @@ Pick the threshold from your average document size, not from a round number.
 At the ~2.7 MB/parse observed on a 41 KB real-world article, 500 parses is
 already more than 1 GB of retention before the reset.
 
-Pinning `jsdom@26.1.0` also avoids it, at the cost of everything else in 27+.
+Pinning `jsdom@26.1.0` also avoids it, at the cost of every fix and feature
+that landed in 27 and later — including the 29 performance change that repaired
+the no-id baseline.
 
 ---
 
