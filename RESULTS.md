@@ -1,3 +1,5 @@
+**English** · [繁體中文](RESULTS.zh-TW.md)
+
 # Results
 
 Retained heap per call, in KB, after forced GC. Lower is better; anything under
@@ -91,7 +93,7 @@ The fixtures above are Lorem ipsum. On a production CMS article — 41,316 bytes
 with the usual ad slots and anchor targets — the same measurement gives
 **~2.7 MB retained per parse**.
 
-That article is not in this repository (it is not mine to publish), which is the
-whole point of the synthetic fixtures: they reproduce the mechanism and the
-scaling law without needing it. The 586 KB/call at 160 paragraphs is the same
-phenomenon at smaller scale.
+That article is not in this repository — it is not mine to publish, which is
+exactly the point of the synthetic fixtures: they reproduce the mechanism and
+the scaling law without it. The 586 KB/call at 160 paragraphs is the same
+phenomenon at a smaller scale.

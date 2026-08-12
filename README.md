@@ -1,19 +1,21 @@
+**English** · [繁體中文](README.zh-TW.md)
+
 # jsdom `id` attribute retention — a memory leak report
 
 > **In jsdom ≥ 27, parsing a document that contains a single element with an `id`
 > attribute — from a long-lived `Window` — permanently retains the entire
 > document.** Still present in 30.0.1.
 
-Everything below is produced by the scripts in this repository. Raw output from
-the run that produced the tables is committed under [`results/`](results/) —
-macOS, Node v24.13.0, Docker 29.5.2, 2026-08-12.
+Every number below was produced by the scripts in this repository; the raw
+output of that run is committed under [`results/`](results/) — macOS,
+Node v24.13.0, Docker 29.5.2, 2026-08-12.
 
 <!-- TODO: link the narrative writeup here once it is published -->
 
 
-The retention is gated by the `id` attribute alone. Element type, position and
-document size do not gate it; document size only determines *how much* is
-retained. `class`, `data-*` and `name` do not trigger it.
+Whether it happens is gated by the `id` attribute alone. Element type and
+position are irrelevant; document size only determines *how much* is retained.
+`class`, `data-*` and `name` do not trigger it at all.
 
 ---
 
@@ -100,7 +102,7 @@ in [RESULTS.md](RESULTS.md); the raw log is in [`results/`](results/).
 | control: `+ name` | 0.57 |
 
 Element type does not matter, position does not matter, and the other three
-attributes sit at baseline. Two attributes on the same element, a factor of 230
+attributes sit at baseline — one element, two attributes, a factor of 230
 between them.
 
 **One `id` pins the whole document** (`03-scaling.mjs`, jsdom 30.0.1):
@@ -166,7 +168,7 @@ GC roots
 ```
 
 The `Set`'s backing array grows linearly with the number of parses. Nothing ever
-removes from it. And because a retained element keeps its `parentNode` alive,
+removes entries from it. And because a retained element keeps its `parentNode` alive,
 retaining one element retains the whole tree it belongs to.
 
 This is the shape of an `id → element` lookup cache scoped to the **`Window`**
@@ -175,7 +177,8 @@ adds its id-bearing elements to the shared cache, and they are never evicted.
 
 > Inferred from the retainer shape plus the fact that `id` is the sole trigger —
 > not from reading jsdom's internals line by line. If a maintainer reads this and
-> the mechanism is something adjacent, the measurements above still stand.
+> the real mechanism turns out to be something adjacent, the measurements above
+> still stand.
 
 ---
 
@@ -233,7 +236,7 @@ export const sanitize = (html) => {
 
 Pick the threshold from your average document size, not from a round number.
 At the ~2.7 MB/parse observed on a 41 KB real-world article, 500 parses is
-already >1 GB of retention before the reset.
+already more than 1 GB of retention before the reset.
 
 Pinning `jsdom@26.1.0` also avoids it, at the cost of everything else in 27+.
 
