@@ -87,7 +87,7 @@ Growing the id count 20× on the same document grows it 1.5×.
 
 ## Real-world magnitude
 
-The fixtures above are Lorem ipsum. On a production CMS article — 26 KB of HTML
+The fixtures above are Lorem ipsum. On a production CMS article — 41,316 bytes of HTML
 with the usual ad slots and anchor targets — the same measurement gives
 **~2.7 MB retained per parse**.
 

@@ -115,7 +115,7 @@ between them.
 Retention tracks document size, not id count. A single `id` is a switch, not a
 dial.
 
-On a production CMS article — 26 KB of HTML with the usual ad slots and anchor
+On a production CMS article — 41,316 bytes of HTML with the usual ad slots and anchor
 targets — the same measurement gives **~2.7 MB retained per parse**. That
 document is not in this repository; the synthetic fixtures reproduce the
 mechanism and the scaling law without it.
@@ -232,7 +232,7 @@ export const sanitize = (html) => {
 ```
 
 Pick the threshold from your average document size, not from a round number.
-At the ~2.7 MB/parse observed on a 26 KB real-world article, 500 parses is
+At the ~2.7 MB/parse observed on a 41 KB real-world article, 500 parses is
 already >1 GB of retention before the reset.
 
 Pinning `jsdom@26.1.0` also avoids it, at the cost of everything else in 27+.
