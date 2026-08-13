@@ -12,7 +12,6 @@ Node v24.13.0, Docker 29.5.2, 2026-08-12.
 
 <!-- TODO: link the narrative writeup here once it is published -->
 
-
 Whether it happens is gated by the `id` attribute alone. Element type and
 position are irrelevant; document size only determines *how much* is retained.
 `class`, `data-*` and `name` do not trigger it at all.
@@ -395,9 +394,6 @@ already match the committed run.
 | `run-local.sh` | the same matrix without Docker |
 | `charts/build.mjs` | regenerates the figures from the committed run |
 | `charts/index.html` | all four figures with table views, EN/ZH |
-
-All fixtures are synthetic. No production content, configuration or identifiers
-appear anywhere in this repository.
 
 ## License
 

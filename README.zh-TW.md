@@ -315,10 +315,6 @@ node charts/build.mjs
 | `charts/build.mjs` | 從 commit 的那次執行重新產生所有圖表 |
 | `charts/index.html` | 四張圖加表格檢視，可切換中英 |
 
-所有 fixture 都是合成的。這個 repo 裡沒有任何正式站的內容、設定或識別資訊。
-
-> 程式碼註解維持英文，因為這份重現的預期讀者包含 jsdom 與 DOMPurify 的上游維護者。
-
 ## 授權
 
 MIT
