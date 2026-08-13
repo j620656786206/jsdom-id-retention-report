@@ -277,24 +277,109 @@ carrying `id`s. Only a minimal reproduction settles causality.
 
 ## Running it
 
-Docker, full version matrix (this is what produced [`results/`](results/)):
+### What you need
 
-```bash
-./run-all.sh                                  # 26.1.0 / 27.0.0 / 28.1.0 / 29.1.1 / 30.0.1
-JSDOM_VERSIONS="28.1.0" ./run-all.sh          # one version
-SCRIPTS="01-minimal.mjs" ./run-all.sh         # one script
-```
+**Node 20+** is enough for every script (24.13.0 was used here). **Docker** is
+only needed for `run-all.sh`, and **Python 3** only for `retainers.py`.
 
-Each case runs in a 4 GB container with a 2 GB heap — enough headroom that the
-leak shows up as a slope rather than crashing the process mid-measurement. Raw
-output is written to `results/raw-<timestamp>.txt`.
-
-Without Docker (uses the `jsdom` version pinned in `package.json`):
+### Start here — one command, about a second
 
 ```bash
 npm install
 node --expose-gc 01-minimal.mjs
 ```
+
+On the pinned jsdom 28.1.0 that prints something close to:
+
+```
+jsdom 28.1.0
+
+no id attribute                         6.88 KB/call
+one <div id="ad1">                    189.73 KB/call
+```
+
+Two rows, one `id` attribute between them. If you only run one thing, run this.
+
+The last digits move a little between runs — this is a measurement, not a
+constant. A local run here gave 6.86 and 189.79 against the 6.88 and 189.73 in
+[`results/`](results/), which came from the container.
+
+`--expose-gc` is not optional — the harness throws without it, because a
+measurement taken without a forced GC reports uncollected garbage rather than
+memory that cannot be collected.
+
+### Then, in order
+
+Each script answers one question, and each builds on the one before it:
+
+| Step | The question it answers | Runtime |
+|---|---|---|
+| `node --expose-gc 01-minimal.mjs` | Does a single `id` attribute change anything? | ~1 s |
+| `node --expose-gc 02-attribute-ablation.mjs` | Is it `id`, or just one more element? | ~4 s |
+| `node --expose-gc 03-scaling.mjs` | Does retention track id count, or document size? | ~3 s |
+| `node --expose-gc 04-heap-snapshot.mjs` | — writes `out/leak.heapsnapshot` (~53 MB, gitignored) | ~1 s |
+| `python3 retainers.py out/leak.heapsnapshot HTMLDivElementImpl` | Why is it never collected? | ~1 s |
+
+Scripts 02 and 03 go through DOMPurify, because that is the shape the problem
+shows up in on a real server; 01 uses plain jsdom to prove no sanitizer is
+involved. The npm scripts (`npm run minimal`, `ablation`, `scaling`, `snapshot`)
+are the same commands with `--expose-gc` already set.
+
+### The version matrix — where the other versions come from
+
+`package.json` pins **one** jsdom version, and one package name cannot hold five
+at once. The matrix does not come from `package.json`; each version is installed
+over the pinned one:
+
+```dockerfile
+ARG JSDOM_VERSION=28.1.0
+COPY package.json ./
+RUN npm install … && npm install jsdom@${JSDOM_VERSION}   # ← overrides the pin
+```
+
+`run-all.sh` builds one image per version and runs every script inside it:
+
+```bash
+./run-all.sh                             # 26.1.0 / 27.0.0 / 28.1.0 / 29.1.1 / 30.0.1
+./run-local.sh                           # same matrix, no Docker
+JSDOM_VERSIONS="30.0.1" ./run-all.sh     # one version
+SCRIPTS="01-minimal.mjs" ./run-all.sh    # one script
+```
+
+Both write to `results/raw-<timestamp>.txt`.
+
+**You do not have to take the version labels on trust.** Every script prints the
+version it actually loaded, read from the installed package at runtime:
+
+```js
+export const jsdomVersion = async () =>
+  (await import('jsdom/package.json', { with: { type: 'json' } })).default.version
+```
+
+So the log labels itself: a block reading `jsdom 27.0.0` came from a process with
+27.0.0 in `node_modules`. Faking it would mean actually installing that version.
+
+**Docker or local?** `run-all.sh` gives each case a 4 GB container and a 2 GB
+heap — enough headroom that the leak shows as a slope instead of crashing the
+process mid-measurement, and it is what produced [`results/`](results/).
+`run-local.sh` installs each version into `./node_modules` in turn and restores
+the pin afterwards (it never rewrites `package.json`); it needs no Docker, but
+runs on your host Node with no memory cap, so expect small drift.
+
+**Near-zero readings are noise, and can come out negative.** A clean version may
+report something like `-0.53 KB/call`. Anything under about 1 KB/call means
+"nothing retained" and the sign carries no meaning down there. The signal is the
+`id` column towering over the no-id column from 27.0.0 onward — that gap is three
+orders of magnitude, far outside the noise.
+
+### Regenerating the figures
+
+```bash
+node charts/build.mjs
+```
+
+Only necessary if you change the numbers in `build.mjs`; the committed SVGs
+already match the committed run.
 
 ## Files
 
@@ -306,7 +391,8 @@ node --expose-gc 01-minimal.mjs
 | `04-heap-snapshot.mjs` | writes `out/leak.heapsnapshot` |
 | `retainers.py` | walks a snapshot back to a GC root |
 | `lib/measure.mjs` | shared harness (forced GC, event-loop yields, warmup) |
-| `Dockerfile`, `run-all.sh` | version matrix |
+| `Dockerfile`, `run-all.sh` | version matrix, in Docker |
+| `run-local.sh` | the same matrix without Docker |
 | `charts/build.mjs` | regenerates the figures from the committed run |
 | `charts/index.html` | all four figures with table views, EN/ZH |
 

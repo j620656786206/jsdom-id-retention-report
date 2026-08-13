@@ -218,22 +218,87 @@ export const sanitize = (html) => {
 
 ## 執行方式
 
-Docker，完整版本矩陣（[`results/`](results/) 就是這樣跑出來的）：
+### 需要什麼
 
-```bash
-./run-all.sh                                  # 26.1.0 / 27.0.0 / 28.1.0 / 29.1.1 / 30.0.1
-JSDOM_VERSIONS="28.1.0" ./run-all.sh          # 單一版本
-SCRIPTS="01-minimal.mjs" ./run-all.sh         # 單一腳本
-```
+**Node 20+** 就能跑完所有腳本（這裡用的是 24.13.0）。**Docker** 只有 `run-all.sh` 需要，**Python 3** 只有 `retainers.py` 需要。
 
-每個案例跑在 4 GB 的容器、2 GB 的 heap 上——留足夠餘裕，讓洩漏呈現成一條斜率，而不是量到一半就把行程撐爆。原始輸出寫到 `results/raw-<timestamp>.txt`。
-
-不用 Docker 的話（會用 `package.json` 裡鎖的 jsdom 版本）：
+### 從這裡開始——一行指令，大約一秒
 
 ```bash
 npm install
 node --expose-gc 01-minimal.mjs
 ```
+
+在 `package.json` 鎖的 jsdom 28.1.0 上，會印出接近這樣的東西：
+
+```
+jsdom 28.1.0
+
+no id attribute                         6.88 KB/call
+one <div id="ad1">                    189.73 KB/call
+```
+
+兩列，中間只差一個 `id` 屬性。只想跑一個東西的話，跑這個就夠了。
+
+末位數字每次跑都會有些微差異——這是量測值，不是常數。本機跑出來是 6.86 和 189.79，[`results/`](results/) 裡的 6.88 和 189.73 則是在容器裡跑的。
+
+`--expose-gc` 不是可選的——沒帶這個參數 harness 會直接丟錯，因為沒有強制 GC 的量測，量到的是「還沒被回收的垃圾」，不是「收不回來的東西」。
+
+### 接著照這個順序
+
+每支腳本回答一個問題，而且是接著上一支往下問：
+
+| 步驟 | 回答什麼問題 | 執行時間 |
+|---|---|---|
+| `node --expose-gc 01-minimal.mjs` | 一個 `id` 屬性會不會造成差別？ | 約 1 秒 |
+| `node --expose-gc 02-attribute-ablation.mjs` | 是 `id`，還是只是「多了一個元素」？ | 約 4 秒 |
+| `node --expose-gc 03-scaling.mjs` | 殘留跟著 id 數量走，還是跟著文件大小走？ | 約 3 秒 |
+| `node --expose-gc 04-heap-snapshot.mjs` | ——產生 `out/leak.heapsnapshot`（約 53 MB，已 gitignore） | 約 1 秒 |
+| `python3 retainers.py out/leak.heapsnapshot HTMLDivElementImpl` | 為什麼收不回來？ | 約 1 秒 |
+
+02 和 03 會經過 DOMPurify，因為那是這個問題在真實 server 上現形的形狀；01 用純 jsdom，用來證明整件事跟 sanitizer 無關。`npm run minimal`、`ablation`、`scaling`、`snapshot` 是同樣的指令，`--expose-gc` 已經帶好了。
+
+### 版本矩陣——其他版本是哪來的
+
+`package.json` 只鎖**一個** jsdom 版本，同一個套件名也不可能同時裝五個版本。矩陣不是從 `package.json` 來的，而是每個版本各自裝上去蓋掉它：
+
+```dockerfile
+ARG JSDOM_VERSION=28.1.0
+COPY package.json ./
+RUN npm install … && npm install jsdom@${JSDOM_VERSION}   # ← 這行蓋掉 package.json 鎖的版本
+```
+
+`run-all.sh` 對每個版本各 build 一個 image，在裡面把所有腳本跑一遍：
+
+```bash
+./run-all.sh                             # 26.1.0 / 27.0.0 / 28.1.0 / 29.1.1 / 30.0.1
+./run-local.sh                           # 同一組矩陣，不需要 Docker
+JSDOM_VERSIONS="30.0.1" ./run-all.sh     # 單一版本
+SCRIPTS="01-minimal.mjs" ./run-all.sh    # 單一腳本
+```
+
+兩支都會把原始輸出寫到 `results/raw-<timestamp>.txt`。
+
+**輸出裡的版本號不需要你相信我。** 每支腳本印出的版本，都是執行當下從安裝好的套件讀出來的：
+
+```js
+export const jsdomVersion = async () =>
+  (await import('jsdom/package.json', { with: { type: 'json' } })).default.version
+```
+
+所以 log 是自己標記自己的：寫著 `jsdom 27.0.0` 的那一段，就是 `node_modules` 裡真的裝著 27.0.0 的行程跑出來的。要造假得先真的把那一版裝起來。
+
+**該用 Docker 還是本機？** `run-all.sh` 給每個案例 4 GB 容器和 2 GB heap——留足夠餘裕，讓洩漏呈現成一條斜率，而不是量到一半就把行程撐爆，[`results/`](results/) 就是這樣跑出來的。`run-local.sh` 則是依序把每個版本裝進 `./node_modules`，跑完再還原（全程不會改寫 `package.json`）；不需要 Docker，但跑在你自己的 Node 上、沒有記憶體上限，數字會有些微飄移。
+
+**接近零的數字是噪音，而且可能是負的。** 乾淨的版本可能會印出 `-0.53 KB/call` 這種值。低於約 1 KB/call 就代表「什麼都沒留下」，那個範圍裡的正負號沒有意義。真正的訊號是 27.0.0 之後 `id` 那一欄把無 id 那一欄壓得死死的——差三個數量級，遠遠超出噪音範圍。
+
+### 重新產生圖表
+
+```bash
+node charts/build.mjs
+```
+
+只有改了 `build.mjs` 裡的數字才需要跑；commit 在 repo 裡的 SVG 已經對應 commit 的那次執行。
 
 ## 檔案
 
@@ -245,7 +310,8 @@ node --expose-gc 01-minimal.mjs
 | `04-heap-snapshot.mjs` | 產生 `out/leak.heapsnapshot` |
 | `retainers.py` | 從 snapshot 反向走訪到 GC root |
 | `lib/measure.mjs` | 共用量測工具（強制 GC、讓出 event loop、暖機） |
-| `Dockerfile`、`run-all.sh` | 版本矩陣 |
+| `Dockerfile`、`run-all.sh` | 版本矩陣（Docker） |
+| `run-local.sh` | 同一組矩陣，不需要 Docker |
 | `charts/build.mjs` | 從 commit 的那次執行重新產生所有圖表 |
 | `charts/index.html` | 四張圖加表格檢視，可切換中英 |
 
