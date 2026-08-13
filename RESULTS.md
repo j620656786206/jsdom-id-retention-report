@@ -14,7 +14,7 @@ Produced by `./run-all.sh` on 2026-08-12. Raw output:
 | container | `node:24.13.0-alpine`, `--memory=4g`, `--max-old-space-size=2048` |
 | dompurify | 3.4.13 (scripts 02 and 03 only) |
 | iterations | 300 measured, 25 warmup discarded |
-| fixture | synthetic Lorem ipsum paragraphs; no production content |
+| fixture | synthetic Lorem ipsum paragraphs |
 
 ---
 
@@ -93,7 +93,7 @@ The fixtures above are Lorem ipsum. On a production CMS article — 41,316 bytes
 with the usual ad slots and anchor targets — the same measurement gives
 **~2.7 MB retained per parse**.
 
-That article is not in this repository — it is not mine to publish, which is
-exactly the point of the synthetic fixtures: they reproduce the mechanism and
-the scaling law without it. The 586 KB/call at 160 paragraphs is the same
+That article is not in this repository, which is exactly the point of the
+synthetic fixtures: they reproduce the mechanism and the scaling law without
+it. The 586 KB/call at 160 paragraphs is the same
 phenomenon at a smaller scale.

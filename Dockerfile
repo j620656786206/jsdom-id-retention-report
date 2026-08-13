@@ -1,5 +1,5 @@
-# Pinned to the Node used in the environment where this was first observed.
-# Any Node 20+ reproduces it; the variable that matters is JSDOM_VERSION.
+# Node is pinned so the matrix is reproducible run to run; any Node 20+ shows
+# the same thing. The variable that matters is JSDOM_VERSION.
 FROM node:24.13.0-alpine
 WORKDIR /repro
 

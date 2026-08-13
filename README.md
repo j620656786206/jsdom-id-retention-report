@@ -10,8 +10,6 @@ Every number below was produced by the scripts in this repository; the raw
 output of that run is committed under [`results/`](results/) — macOS,
 Node v24.13.0, Docker 29.5.2, 2026-08-12.
 
-<!-- TODO: link the narrative writeup here once it is published -->
-
 Whether it happens is gated by the `id` attribute alone. Element type and
 position are irrelevant; document size only determines *how much* is retained.
 `class`, `data-*` and `name` do not trigger it at all.

@@ -99,7 +99,7 @@ row('one <div id="ad1">', await retainedPerCall(parseRepeatedly(`<body>${body()}
 
 殘留跟著文件大小走，不跟著 id 數量走。一個 `id` 是開關，不是刻度。
 
-換成正式站的 CMS 文章——41,316 bytes 的 HTML，帶著常見的廣告版位與錨點——同樣的量測給出 **每次解析約 2.7 MB**。那份文件不在這個 repo 裡；合成的 fixture 已經足以重現整個機制與 scaling law。
+換成一份正式站的 CMS 文章——41,316 bytes 的 HTML，帶著常見的廣告版位與錨點——同樣的量測給出 **每次解析約 2.7 MB**。那份文件不在這個 repo 裡；合成的 fixture 已經足以重現整個機制與 scaling law。
 
 ---
 

@@ -12,7 +12,7 @@
 | 容器 | `node:24.13.0-alpine`、`--memory=4g`、`--max-old-space-size=2048` |
 | dompurify | 3.4.13（只有腳本 02 與 03 用到） |
 | 迭代數 | 量測 300 次，另有 25 次暖機不計入 |
-| fixture | 合成的 Lorem ipsum 段落，無任何正式站內容 |
+| fixture | 合成的 Lorem ipsum 段落 |
 
 ---
 
@@ -76,6 +76,6 @@
 
 ## 真實世界的量級
 
-上面的 fixture 都是 Lorem ipsum。換成正式站的 CMS 文章——41,316 bytes 的 HTML，帶著常見的廣告版位與錨點——同樣的量測給出**每次解析約 2.7 MB**。
+上面的 fixture 都是 Lorem ipsum。換成一份正式站的 CMS 文章——41,316 bytes 的 HTML，帶著常見的廣告版位與錨點——同樣的量測給出**每次解析約 2.7 MB**。
 
-那篇文章不在這個 repo 裡（它不是我的、不能公開），而這正是合成 fixture 的用意：不需要那份文件，也能重現整個機制與 scaling law。160 段那格的 586 KB/call，是同一個現象的縮小版。
+那篇文章不在這個 repo 裡，而這正是合成 fixture 的用意：不需要那份文件，也能重現整個機制與 scaling law。160 段那格的 586 KB/call，是同一個現象的縮小版。
