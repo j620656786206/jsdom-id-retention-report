@@ -57,7 +57,7 @@ row('one <div id="ad1">', await retainedPerCall(parseRepeatedly(`<body>${body()}
 
 每次呼叫的殘留堆積（KB），量測前後都強制 GC。每個版本的完整表格在 [RESULTS.zh-TW.md](RESULTS.zh-TW.md)，原始 log 在 [`results/`](results/)。下面的圖表由 [`charts/build.mjs`](charts/build.mjs) 從同一次執行產生，四張圖加表格檢視在 [`charts/index.html`](charts/index.html)。
 
-![一個屬性就決定漏不漏：jsdom 30.0.1 上四個帶 id 的案例都殘留約 157 KB，class、data-*、name 都在 0.7 KB 以下](charts/attribute-ablation.zh-TW.svg)
+![一個屬性就決定記憶體會不會 leak：jsdom 30.0.1 上四個帶 id 的案例都殘留約 157 KB，class、data-*、name 都在 0.7 KB 以下](charts/attribute-ablation.zh-TW.svg)
 
 ![jsdom 26.1.0 乾淨，缺陷從 27.0.0 進來，30.0.1 仍在，30.1.3 已經沒有](charts/version-boundary.zh-TW.svg)
 

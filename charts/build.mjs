@@ -123,7 +123,7 @@ function ablation(loc, ver = '30.0.1') {
   })
 
   const t = loc === 'zh'
-    ? { title: '一個屬性就決定漏不漏', sub: `每次解析的殘留（KB/call），jsdom ${ver}`, a: '帶 id', b: '對照組', unit: 'KB/call' }
+    ? { title: '一個屬性就決定記憶體會不會 leak', sub: `每次解析的殘留（KB/call），jsdom ${ver}`, a: '帶 id', b: '對照組', unit: 'KB/call' }
     : { title: 'One attribute decides it', sub: `Retained heap per parse (KB/call), jsdom ${ver}`, a: 'id-bearing', b: 'control', unit: 'KB/call' }
 
   let head = `  <text x="24" y="30" class="t ink">${esc(t.title)}</text>\n`
@@ -208,7 +208,7 @@ function scaling(loc, ver = '30.0.1') {
 
   const t = loc === 'zh'
     ? {
-        title: 'id 決定漏不漏，文件大小決定漏多少',
+        title: 'id 決定記憶體會不會 leak，文件大小決定 leak 多少',
         sub: `兩張圖共用同一條 y 軸（jsdom ${ver}）`,
         pa: '改變文件大小，id 固定 1 個', pb: '改變 id 數量，文件固定 40 段',
         a: ['10 段', '40 段', '160 段'], b: ['1 個 id', '20 個 id'],

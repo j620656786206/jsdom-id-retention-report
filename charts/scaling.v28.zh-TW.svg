@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 380" width="760" height="380" role="img" aria-labelledby="t d">
-  <title id="t">id 決定漏不漏，文件大小決定漏多少</title>
+  <title id="t">id 決定記憶體會不會 leak，文件大小決定 leak 多少</title>
   <desc id="d">兩張圖共用同一條 y 軸（jsdom 28.1.0）. 改變文件大小，id 固定 1 個: 85.56, 186.49, 586.58. 改變 id 數量，文件固定 40 段: 185.1, 256.14</desc>
   <style>
     .s { fill: #fcfcfb }
@@ -24,7 +24,7 @@
     }
   </style>
   <rect width="760" height="380" rx="8" class="s"/>
-  <text x="24" y="30" class="t ink">id 決定漏不漏，文件大小決定漏多少</text>
+  <text x="24" y="30" class="t ink">id 決定記憶體會不會 leak，文件大小決定 leak 多少</text>
   <text x="24" y="50" class="st ink2">兩張圖共用同一條 y 軸（jsdom 28.1.0）</text>
   <text x="736" y="30" class="tick muted" text-anchor="end">KB/call</text>
   <line x1="56" y1="324" x2="736" y2="324" class="grid" stroke-width="1"/>
