@@ -1,0 +1,204 @@
+host node:   v24.13.0
+docker:      Docker version 29.5.2, build 79eb04c7d8
+started:     2026-10-20T08:00:22Z
+versions:    26.1.0 27.0.0 28.1.0 29.1.1 30.0.1 30.1.3
+scripts:     01-minimal.mjs 02-attribute-ablation.mjs 03-scaling.mjs
+
+==============================================================
+ jsdom 26.1.0
+==============================================================
+--- 01-minimal.mjs
+jsdom 26.1.0
+
+no id attribute                         0.11 KB/call
+one <div id="ad1">                      0.35 KB/call
+
+--- 02-attribute-ablation.mjs
+jsdom 26.1.0
+
+baseline: no id                         0.43 KB/call
++ <div id>                              0.96 KB/call
++ <p id>                                0.75 KB/call
++ <span id>                             0.38 KB/call
++ <div id> first, not last              0.58 KB/call
+control: + class                        0.82 KB/call
+control: + data-*                       0.48 KB/call
+control: + name                         0.47 KB/call
+
+--- 03-scaling.mjs
+jsdom 26.1.0
+
+vary document size, hold id count at 1:
+  10 paragraphs + 1 id                  0.94 KB/call
+  40 paragraphs + 1 id                  1.19 KB/call
+  160 paragraphs + 1 id                 0.41 KB/call
+
+vary id count, hold document size:
+  40 paragraphs + 1 ids                 0.27 KB/call
+  40 paragraphs + 20 ids                0.44 KB/call
+
+==============================================================
+ jsdom 27.0.0
+==============================================================
+--- 01-minimal.mjs
+jsdom 27.0.0
+
+no id attribute                         6.90 KB/call
+one <div id="ad1">                    181.22 KB/call
+
+--- 02-attribute-ablation.mjs
+jsdom 27.0.0
+
+baseline: no id                         7.24 KB/call
++ <div id>                            176.86 KB/call
++ <p id>                              176.63 KB/call
++ <span id>                           176.39 KB/call
++ <div id> first, not last            176.05 KB/call
+control: + class                        7.06 KB/call
+control: + data-*                       7.09 KB/call
+control: + name                         7.11 KB/call
+
+--- 03-scaling.mjs
+jsdom 27.0.0
+
+vary document size, hold id count at 1:
+  10 paragraphs + 1 id                 82.82 KB/call
+  40 paragraphs + 1 id                177.13 KB/call
+  160 paragraphs + 1 id               551.22 KB/call
+
+vary id count, hold document size:
+  40 paragraphs + 1 ids               175.79 KB/call
+  40 paragraphs + 20 ids              245.65 KB/call
+
+==============================================================
+ jsdom 28.1.0
+==============================================================
+--- 01-minimal.mjs
+jsdom 28.1.0
+
+no id attribute                         6.88 KB/call
+one <div id="ad1">                    189.75 KB/call
+
+--- 02-attribute-ablation.mjs
+jsdom 28.1.0
+
+baseline: no id                         7.32 KB/call
++ <div id>                            186.19 KB/call
++ <p id>                              186.15 KB/call
++ <span id>                           185.83 KB/call
++ <div id> first, not last            185.34 KB/call
+control: + class                        7.00 KB/call
+control: + data-*                       6.96 KB/call
+control: + name                         7.21 KB/call
+
+--- 03-scaling.mjs
+jsdom 28.1.0
+
+vary document size, hold id count at 1:
+  10 paragraphs + 1 id                 85.59 KB/call
+  40 paragraphs + 1 id                186.84 KB/call
+  160 paragraphs + 1 id               586.65 KB/call
+
+vary id count, hold document size:
+  40 paragraphs + 1 ids               185.14 KB/call
+  40 paragraphs + 20 ids              256.15 KB/call
+
+==============================================================
+ jsdom 29.1.1
+==============================================================
+--- 01-minimal.mjs
+jsdom 29.1.1
+
+no id attribute                         0.11 KB/call
+one <div id="ad1">                    161.15 KB/call
+
+--- 02-attribute-ablation.mjs
+jsdom 29.1.1
+
+baseline: no id                         0.53 KB/call
++ <div id>                            157.60 KB/call
++ <p id>                              158.06 KB/call
++ <span id>                           157.67 KB/call
++ <div id> first, not last            157.15 KB/call
+control: + class                        0.71 KB/call
+control: + data-*                       0.40 KB/call
+control: + name                         0.52 KB/call
+
+--- 03-scaling.mjs
+jsdom 29.1.1
+
+vary document size, hold id count at 1:
+  10 paragraphs + 1 id                 51.87 KB/call
+  40 paragraphs + 1 id                157.70 KB/call
+  160 paragraphs + 1 id               579.74 KB/call
+
+vary id count, hold document size:
+  40 paragraphs + 1 ids               156.97 KB/call
+  40 paragraphs + 20 ids              231.34 KB/call
+
+==============================================================
+ jsdom 30.0.1
+==============================================================
+--- 01-minimal.mjs
+jsdom 30.0.1
+
+no id attribute                         0.11 KB/call
+one <div id="ad1">                    161.16 KB/call
+
+--- 02-attribute-ablation.mjs
+jsdom 30.0.1
+
+baseline: no id                         0.51 KB/call
++ <div id>                            157.44 KB/call
++ <p id>                              158.03 KB/call
++ <span id>                           157.39 KB/call
++ <div id> first, not last            156.77 KB/call
+control: + class                        0.74 KB/call
+control: + data-*                       0.26 KB/call
+control: + name                         0.58 KB/call
+
+--- 03-scaling.mjs
+jsdom 30.0.1
+
+vary document size, hold id count at 1:
+  10 paragraphs + 1 id                 51.94 KB/call
+  40 paragraphs + 1 id                157.49 KB/call
+  160 paragraphs + 1 id               579.69 KB/call
+
+vary id count, hold document size:
+  40 paragraphs + 1 ids               156.99 KB/call
+  40 paragraphs + 20 ids              231.35 KB/call
+
+==============================================================
+ jsdom 30.1.3
+==============================================================
+--- 01-minimal.mjs
+jsdom 30.1.3
+
+no id attribute                         0.10 KB/call
+one <div id="ad1">                      0.37 KB/call
+
+--- 02-attribute-ablation.mjs
+jsdom 30.1.3
+
+baseline: no id                         0.56 KB/call
++ <div id>                              1.04 KB/call
++ <p id>                                1.19 KB/call
++ <span id>                             0.36 KB/call
++ <div id> first, not last              0.61 KB/call
+control: + class                        0.71 KB/call
+control: + data-*                       0.20 KB/call
+control: + name                         0.51 KB/call
+
+--- 03-scaling.mjs
+jsdom 30.1.3
+
+vary document size, hold id count at 1:
+  10 paragraphs + 1 id                  1.03 KB/call
+  40 paragraphs + 1 id                  1.25 KB/call
+  160 paragraphs + 1 id                 0.34 KB/call
+
+vary id count, hold document size:
+  40 paragraphs + 1 ids                 0.24 KB/call
+  40 paragraphs + 20 ids                0.30 KB/call
+

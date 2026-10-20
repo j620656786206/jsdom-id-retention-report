@@ -4,15 +4,19 @@
 
 > **In jsdom ≥ 27, parsing a document that contains a single element with an `id`
 > attribute — from a long-lived `Window` — permanently retains the entire
-> document.** Still present in 30.0.1.
+> document.** Present from 27.0.0 through 30.0.1; **fixed in 30.1.0**
+> (2026-09-17). If you are on 27–30.0.x, upgrade.
 
 Every number below was produced by the scripts in this repository; the raw
 output of that run is committed under [`results/`](results/) — macOS,
-Node v24.13.0, Docker 29.5.2, 2026-08-12.
+Node v24.13.0, Docker 29.5.2, 2026-08-12. The matrix was re-run on 2026-10-20
+against the then-latest 30.1.3 to check whether upstream had fixed it; it had.
 
 Whether it happens is gated by the `id` attribute alone. Element type and
 position are irrelevant; document size only determines *how much* is retained.
-`class`, `data-*` and `name` do not trigger it at all.
+`class`, `data-*` and `name` on an `<a>` do not trigger it at all. (The upstream
+report notes that `name` on elements such as `<img>`, `<form>` or `<iframe>`
+does, for the same reason — see [Upstream status](#upstream-status).)
 
 ---
 
@@ -79,7 +83,7 @@ open [`charts/index.html`](charts/index.html) for all four with table views.
 
 ![One attribute decides it: on jsdom 30.0.1 the four id-bearing cases retain ~157 KB per parse while class, data-* and name sit under 0.7 KB](charts/attribute-ablation.svg)
 
-![jsdom 26.1.0 is clean; retention appears at 27.0.0 and is still present at 30.0.1](charts/version-boundary.svg)
+![jsdom 26.1.0 is clean; retention appears at 27.0.0, is still present at 30.0.1, and is gone in 30.1.3](charts/version-boundary.svg)
 
 ![Retention tracks document size, not id count](charts/scaling.svg)
 
@@ -91,7 +95,13 @@ open [`charts/index.html`](charts/index.html) for all four with table views.
 | 27.0.0 | 6.90 | **181.09** | retention starts |
 | 28.1.0 | 6.88 | **189.73** | |
 | 29.1.1 | 0.11 | **161.14** | baseline fixed, retention not |
-| 30.0.1 | 0.11 | **161.14** | still present |
+| 30.0.1 | 0.11 | **161.14** | last affected release |
+| 30.1.0 | -0.15 | 0.33 | **fixed** |
+| 30.1.3 | 0.10 | 0.37 | clean |
+
+The 30.1.x rows come from the 2026-10-20 run; 30.1.0 was checked with
+`01-minimal.mjs` only, to find the release that fixed it. Every row from 26.1.0
+to 30.0.1 reproduced within noise of the numbers above on that run.
 
 **It is `id`, not "one more element"** (`02-attribute-ablation.mjs`, jsdom 30.0.1):
 
@@ -182,17 +192,29 @@ This is the shape of an `id → element` lookup cache scoped to the **`Window`**
 rather than to the **`Document`**. Every `Document` parsed from that `Window`
 adds its id-bearing elements to the shared cache, and they are never evicted.
 
-> Inferred from the retainer shape plus the fact that `id` is the sole trigger —
-> not from reading jsdom's internals line by line. If a maintainer reads this and
-> the real mechanism turns out to be something adjacent, the measurements above
-> still stand.
+> When this was written, the mechanism was inferred from the retainer shape plus
+> the fact that `id` is the sole trigger — not from reading jsdom's internals.
+> Upstream has since confirmed it: the cache is the tracker behind **named
+> access on `window`** (`window.<id>`), in `lib/jsdom/living/window-properties.js`.
+> It registered id-bearing elements from *every* document sharing the `Window`,
+> including ones from `DOMParser`, and only removed them when they were detached
+> — which never happens to a document that is simply discarded.
 
 ---
 
 ## Upstream status
 
-The mechanism is visible in public trackers, under several different names. None
-of them is "memory leak in jsdom":
+**Fixed in jsdom 30.1.0** (released 2026-09-17), by
+[jsdom#4236](https://github.com/jsdom/jsdom/pull/4236), "Scope named window
+properties to the associated document" (merged 2026-08-18), which closes
+[jsdom#4234](https://github.com/jsdom/jsdom/issues/4234). That issue was filed
+independently on 2026-08-12, the same day as the run in this repository, and
+describes the same retainer chain. The 30.1.0 release notes do not call it out as
+a leak fix, so a changelog skim will not tell you it is gone; running the
+reproduction against the new version will.
+
+Before that, the mechanism was visible in public trackers under several
+different names. None of them is "memory leak in jsdom":
 
 | Report | Framing | Status |
 |---|---|---|
@@ -200,8 +222,9 @@ of them is "memory leak in jsdom":
 | [DOMPurify#1089](https://github.com/cure53/DOMPurify/issues/1089) | leak with DOMPurify + jsdom, suspected `NodeIterator` | closed |
 | [jsdom#3985](https://github.com/jsdom/jsdom/issues/3985), [jsdom#3936](https://github.com/jsdom/jsdom/issues/3936) | "performance regression in v27" | open |
 
-The only fix that ships today is the downstream `clearWindow()` workaround: if
-you never call it, you still leak.
+Until 30.1.0, the only fix that shipped was the downstream `clearWindow()`
+workaround: if you never call it, you still leak. As of 2026-10-20 the two jsdom
+issues are still open, though the retention they partly describe is gone.
 
 Note the 29.1.1 row in the version table — the *no-id* baseline improves sharply
 while the `id` case barely moves. jsdom 29.0.0's release notes contain:
@@ -214,10 +237,13 @@ this specific change is what moved the baseline, only that the boundary matches.
 
 ---
 
-## Workaround
+## Fix, and a workaround if you cannot upgrade
 
-The cache is scoped to the `Window`, so the only exit is to stop the `Window`
-from living forever:
+**Upgrade to jsdom ≥ 30.1.0.** Then run `01-minimal.mjs` against the version you
+actually deploy; that is the only reliable way to know.
+
+If you are stuck on 27–30.0.x, the cache is scoped to the `Window`, so the only
+exit is to stop the `Window` from living forever:
 
 ```js
 import createDOMPurify from 'dompurify'
@@ -246,8 +272,8 @@ At the ~2.7 MB/parse observed on a 41 KB real-world article, 500 parses is
 already more than 1 GB of retention before the reset.
 
 Pinning `jsdom@26.1.0` also avoids it, at the cost of every fix and feature
-that landed in 27 and later — including the 29 performance change that repaired
-the no-id baseline.
+that landed in 27 and later. Now that 30.1.0 exists, there is little reason to
+stay there.
 
 ---
 
@@ -337,7 +363,7 @@ RUN npm install … && npm install jsdom@${JSDOM_VERSION}   # ← overrides the 
 `run-all.sh` builds one image per version and runs every script inside it:
 
 ```bash
-./run-all.sh                             # 26.1.0 / 27.0.0 / 28.1.0 / 29.1.1 / 30.0.1
+./run-all.sh                             # 26.1.0 / 27.0.0 / 28.1.0 / 29.1.1 / 30.0.1 / 30.1.3
 ./run-local.sh                           # same matrix, no Docker
 JSDOM_VERSIONS="30.0.1" ./run-all.sh     # one version
 SCRIPTS="01-minimal.mjs" ./run-all.sh    # one script
@@ -366,8 +392,8 @@ runs on your host Node with no memory cap, so expect small drift.
 **Near-zero readings are noise, and can come out negative.** A clean version may
 report something like `-0.53 KB/call`. Anything under about 1 KB/call means
 "nothing retained" and the sign carries no meaning down there. The signal is the
-`id` column towering over the no-id column from 27.0.0 onward — that gap is three
-orders of magnitude, far outside the noise.
+`id` column towering over the no-id column from 27.0.0 through 30.0.1 — that gap
+is three orders of magnitude, far outside the noise.
 
 ### Regenerating the figures
 
@@ -376,7 +402,8 @@ node charts/build.mjs
 ```
 
 Only necessary if you change the numbers in `build.mjs`; the committed SVGs
-already match the committed run.
+already match the committed runs (2026-08-12, plus 30.1.3 from 2026-10-20 in the
+version-boundary chart).
 
 ## Files
 

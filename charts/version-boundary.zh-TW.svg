@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" width="760" height="400" role="img" aria-labelledby="t d">
-  <title id="t">缺陷從 27 進來，到 30.0.1 仍未修</title>
-  <desc id="d">同一份文件解析 300 次，唯一差異是一個 id 屬性. jsdom 26.1.0: no id 0.11, one id 0.35; jsdom 27.0.0: no id 6.9, one id 181.09; jsdom 28.1.0: no id 6.88, one id 189.73; jsdom 29.1.1: no id 0.11, one id 161.14; jsdom 30.0.1: no id 0.11, one id 161.14</desc>
+  <title id="t">缺陷從 27 進來，30.1 修好</title>
+  <desc id="d">同一份文件解析 300 次，唯一差異是一個 id 屬性. jsdom 26.1.0: no id 0.11, one id 0.35; jsdom 27.0.0: no id 6.9, one id 181.09; jsdom 28.1.0: no id 6.88, one id 189.73; jsdom 29.1.1: no id 0.11, one id 161.14; jsdom 30.0.1: no id 0.11, one id 161.14; jsdom 30.1.3: no id 0.1, one id 0.37</desc>
   <style>
     .s { fill: #fcfcfb }
     .ink { fill: #0b0b0b }  .ink2 { fill: #52514e }
@@ -24,13 +24,13 @@
     }
   </style>
   <rect width="760" height="400" rx="8" class="s"/>
-  <text x="24" y="30" class="t ink">缺陷從 27 進來，到 30.0.1 仍未修</text>
+  <text x="24" y="30" class="t ink">缺陷從 27 進來，30.1 修好</text>
   <text x="24" y="50" class="st ink2">同一份文件解析 300 次，唯一差異是一個 id 屬性</text>
   <rect x="546" y="22" width="10" height="10" rx="2" class="accent"/>
   <text x="561" y="31" class="lbl ink2">有一個 id</text>
   <rect x="634" y="22" width="10" height="10" rx="2" class="context"/>
   <text x="649" y="31" class="lbl ink2">無 id</text>
-  <text x="24" y="386" class="tick muted">26.1.0 兩種情況都乾淨</text>
+  <text x="24" y="386" class="tick muted">26.1.0 與 30.1.3 兩種情況都乾淨</text>
   <text x="736" y="386" class="tick muted" text-anchor="end">KB/call</text>
   <line x1="56" y1="346" x2="736" y2="346" class="grid" stroke-width="1"/>
   <text x="46" y="350" class="tick muted" text-anchor="end">0</text>
@@ -43,25 +43,29 @@
   <line x1="56" y1="78" x2="736" y2="78" class="grid" stroke-width="1"/>
   <text x="46" y="82" class="tick muted" text-anchor="end">200</text>
   <line x1="56" y1="346" x2="736" y2="346" class="axis" stroke-width="1"/>
-  <path d="M99,346v0a0.1474,0.1474 0 0 1 0.1474,-0.1474h23.7052a0.1474,0.1474 0 0 1 0.1474,0.1474v0z" class="context"/>
-  <path d="M125,346v0a0.469,0.469 0 0 1 0.469,-0.469h23.062a0.469,0.469 0 0 1 0.469,0.469v0z" class="accent"/>
-  <text x="137" y="337.531" class="val ink" text-anchor="middle">0.35</text>
-  <text x="124" y="366" class="lbl ink2" text-anchor="middle">26.1.0</text>
-  <path d="M235,346v-5.246a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v5.246z" class="context"/>
-  <path d="M261,346v-238.6606a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v238.6606z" class="accent"/>
-  <text x="273" y="95.33940000000001" class="val ink" text-anchor="middle">181</text>
-  <text x="260" y="366" class="lbl ink2" text-anchor="middle">27.0.0</text>
-  <path d="M371,346v-5.219200000000001a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v5.219200000000001z" class="context"/>
-  <path d="M397,346v-250.2382a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v250.2382z" class="accent"/>
-  <text x="409" y="83.7618" class="val ink" text-anchor="middle">190</text>
-  <text x="396" y="366" class="lbl ink2" text-anchor="middle">28.1.0</text>
-  <path d="M507,346v0a0.1474,0.1474 0 0 1 0.1474,-0.1474h23.7052a0.1474,0.1474 0 0 1 0.1474,0.1474v0z" class="context"/>
-  <path d="M533,346v-211.92759999999998a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v211.92759999999998z" class="accent"/>
-  <text x="545" y="122.07240000000002" class="val ink" text-anchor="middle">161</text>
-  <text x="532" y="366" class="lbl ink2" text-anchor="middle">29.1.1</text>
-  <path d="M643,346v0a0.1474,0.1474 0 0 1 0.1474,-0.1474h23.7052a0.1474,0.1474 0 0 1 0.1474,0.1474v0z" class="context"/>
-  <path d="M669,346v-211.92759999999998a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v211.92759999999998z" class="accent"/>
-  <text x="681" y="122.07240000000002" class="val ink" text-anchor="middle">161</text>
-  <text x="668" y="366" class="lbl ink2" text-anchor="middle">30.0.1</text>
+  <path d="M87.66666666666666,346v0a0.1474,0.1474 0 0 1 0.1474,-0.1474h23.7052a0.1474,0.1474 0 0 1 0.1474,0.1474v0z" class="context"/>
+  <path d="M113.66666666666666,346v0a0.469,0.469 0 0 1 0.469,-0.469h23.062a0.469,0.469 0 0 1 0.469,0.469v0z" class="accent"/>
+  <text x="125.66666666666666" y="337.531" class="val ink" text-anchor="middle">0.35</text>
+  <text x="112.66666666666666" y="366" class="lbl ink2" text-anchor="middle">26.1.0</text>
+  <path d="M200.99999999999997,346v-5.246a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v5.246z" class="context"/>
+  <path d="M226.99999999999997,346v-238.6606a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v238.6606z" class="accent"/>
+  <text x="238.99999999999997" y="95.33940000000001" class="val ink" text-anchor="middle">181</text>
+  <text x="225.99999999999997" y="366" class="lbl ink2" text-anchor="middle">27.0.0</text>
+  <path d="M314.3333333333333,346v-5.219200000000001a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v5.219200000000001z" class="context"/>
+  <path d="M340.3333333333333,346v-250.2382a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v250.2382z" class="accent"/>
+  <text x="352.3333333333333" y="83.7618" class="val ink" text-anchor="middle">190</text>
+  <text x="339.3333333333333" y="366" class="lbl ink2" text-anchor="middle">28.1.0</text>
+  <path d="M427.6666666666667,346v0a0.1474,0.1474 0 0 1 0.1474,-0.1474h23.7052a0.1474,0.1474 0 0 1 0.1474,0.1474v0z" class="context"/>
+  <path d="M453.6666666666667,346v-211.92759999999998a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v211.92759999999998z" class="accent"/>
+  <text x="465.6666666666667" y="122.07240000000002" class="val ink" text-anchor="middle">161</text>
+  <text x="452.6666666666667" y="366" class="lbl ink2" text-anchor="middle">29.1.1</text>
+  <path d="M541,346v0a0.1474,0.1474 0 0 1 0.1474,-0.1474h23.7052a0.1474,0.1474 0 0 1 0.1474,0.1474v0z" class="context"/>
+  <path d="M567,346v-211.92759999999998a4,4 0 0 1 4,-4h16a4,4 0 0 1 4,4v211.92759999999998z" class="accent"/>
+  <text x="579" y="122.07240000000002" class="val ink" text-anchor="middle">161</text>
+  <text x="566" y="366" class="lbl ink2" text-anchor="middle">30.0.1</text>
+  <path d="M654.3333333333333,346v0a0.134,0.134 0 0 1 0.134,-0.134h23.732a0.134,0.134 0 0 1 0.134,0.134v0z" class="context"/>
+  <path d="M680.3333333333333,346v0a0.4958,0.4958 0 0 1 0.4958,-0.4958h23.0084a0.4958,0.4958 0 0 1 0.4958,0.4958v0z" class="accent"/>
+  <text x="692.3333333333333" y="337.5042" class="val ink" text-anchor="middle">0.37</text>
+  <text x="679.3333333333333" y="366" class="lbl ink2" text-anchor="middle">30.1.3</text>
 
 </svg>

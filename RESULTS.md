@@ -7,6 +7,9 @@ Retained heap per call, in KB, after forced GC. Lower is better; anything under
 
 Produced by `./run-all.sh` on 2026-08-12. Raw output:
 [`results/raw-20260812T071121Z.txt`](results/raw-20260812T071121Z.txt).
+Re-run on 2026-10-20 with 30.1.3 added:
+[`results/raw-20261020T080022Z.txt`](results/raw-20261020T080022Z.txt) — see
+[section 4](#4-fixed-in-3010).
 
 | | |
 |---|---|
@@ -31,9 +34,11 @@ same 40-paragraph document. The only difference between the columns is one empty
 | 28.1.0 | 6.88 | **189.73** | 28× |
 | 29.1.1 | 0.11 | **161.14** | 1465× |
 | 30.0.1 | 0.11 | **161.14** | 1465× |
+| 30.1.3 | 0.10 | 0.37 | — |
 
 26.1.0 is clean. The retention appears in 27.0.0 and is still present in 30.0.1,
-the latest release at the time of writing.
+the latest release when this was first written. It is gone in 30.1.x (the 30.1.3
+row is from the 2026-10-20 run).
 
 The 29.1.1 row is where the *no-id* baseline drops from 6.90 back to 0.11 while
 the `id` case barely moves — see the upstream-status section of the
@@ -56,7 +61,9 @@ attribute on that extra element changes.
 | control: `+ name` | 0.44 | 7.06 | 7.19 | 0.53 | 0.57 |
 
 Element type does not matter. Position in the document does not matter.
-`class`, `data-*` and `name` all sit at baseline.
+`class`, `data-*` and `name` all sit at baseline. (The `name` control is on an
+`<a>`; `name` on `<img>`, `<form>` or `<iframe>` is a different case, see the
+README.)
 
 On 30.0.1 the contrast is at its cleanest, because the baseline noise is gone:
 a `class` attribute costs 0.68 KB/call and an `id` costs 157.50 — a factor of
@@ -97,3 +104,38 @@ That article is not in this repository, which is exactly the point of the
 synthetic fixtures: they reproduce the mechanism and the scaling law without
 it. The 586 KB/call at 160 paragraphs is the same
 phenomenon at a smaller scale.
+
+## 4. Fixed in 30.1.0
+
+Re-run on 2026-10-20, same harness and container, with the then-latest 30.1.3
+added. Raw output:
+[`results/raw-20261020T080022Z.txt`](results/raw-20261020T080022Z.txt). Every
+version from 26.1.0 to 30.0.1 reproduced the 2026-08-12 numbers within noise.
+
+**30.1.3, all three scripts:**
+
+| case | KB/call |
+|---|---:|
+| `01` no id | 0.10 |
+| `01` one `<div id>` | 0.37 |
+| `02` baseline: no id | 0.56 |
+| `02` `+ <div id>` | 1.04 |
+| `02` `+ <p id>` | 1.19 |
+| `02` `+ <span id>` | 0.36 |
+| `03` 160 paragraphs + 1 id | 0.34 |
+| `03` 40 paragraphs + 20 ids | 0.30 |
+
+Everything is at the noise floor, the same as 26.1.0.
+
+**Which release fixed it** (`01-minimal.mjs` only):
+
+| jsdom | no id | one `id` |
+|---|---:|---:|
+| 30.0.1 | 0.11 | **161.16** |
+| 30.1.0 | -0.15 | 0.33 |
+| 30.1.1 | -0.14 | 0.33 |
+| 30.1.2 | -0.15 | 0.35 |
+| 30.1.3 | 0.10 | 0.37 |
+
+The change is [jsdom#4236](https://github.com/jsdom/jsdom/pull/4236), first
+released in 30.1.0.

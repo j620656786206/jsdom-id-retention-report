@@ -6,7 +6,7 @@
 #   SCRIPTS="01-minimal.mjs" ./run-all.sh
 set -euo pipefail
 
-VERSIONS="${JSDOM_VERSIONS:-26.1.0 27.0.0 28.1.0 29.1.1 30.0.1}"
+VERSIONS="${JSDOM_VERSIONS:-26.1.0 27.0.0 28.1.0 29.1.1 30.0.1 30.1.3}"
 SCRIPTS="${SCRIPTS:-01-minimal.mjs 02-attribute-ablation.mjs 03-scaling.mjs}"
 OUT_DIR="${OUT_DIR:-results}"
 

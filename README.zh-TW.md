@@ -2,11 +2,11 @@
 
 # jsdom `id` 屬性造成整份文件殘留——記憶體洩漏報告
 
-> **在 jsdom ≥ 27，從一個常駐的 `Window` 解析出來的文件，只要裡面含有任何一個帶 `id` 屬性的元素，整份文件就會被永久保留。** 到 30.0.1 仍然存在。
+> **在 jsdom ≥ 27，從一個常駐的 `Window` 解析出來的文件，只要裡面含有任何一個帶 `id` 屬性的元素，整份文件就會被永久保留。** 27.0.0 到 30.0.1 都有；**30.1.0（2026-09-17）已修好**。還在用 27～30.0.x 的話，請升級。
 
-以下每一個數字都由本 repo 的腳本實跑產生，該次執行的原始輸出 commit 在 [`results/`](results/)——macOS、Node v24.13.0、Docker 29.5.2、2026-08-12。
+以下每一個數字都由本 repo 的腳本實跑產生，該次執行的原始輸出 commit 在 [`results/`](results/)——macOS、Node v24.13.0、Docker 29.5.2、2026-08-12。2026-10-20 對當時最新的 30.1.3 重跑了一次矩陣，確認上游有沒有修——修好了。
 
-會不會發生，只由 `id` 屬性決定。元素種類與位置都無關；文件大小只決定**漏多少**。`class`、`data-*`、`name` 完全不會觸發。
+會不會發生，只由 `id` 屬性決定。元素種類與位置都無關；文件大小只決定**漏多少**。`class`、`data-*`，以及 `<a>` 上的 `name`，完全不會觸發。（上游的回報指出，`<img>`、`<form>`、`<iframe>` 這類元素上的 `name` 會，原因相同——見[上游狀態](#上游狀態)。）
 
 ---
 
@@ -59,7 +59,7 @@ row('one <div id="ad1">', await retainedPerCall(parseRepeatedly(`<body>${body()}
 
 ![一個屬性就決定漏不漏：jsdom 30.0.1 上四個帶 id 的案例都殘留約 157 KB，class、data-*、name 都在 0.7 KB 以下](charts/attribute-ablation.zh-TW.svg)
 
-![jsdom 26.1.0 乾淨，缺陷從 27.0.0 進來，到 30.0.1 仍未修](charts/version-boundary.zh-TW.svg)
+![jsdom 26.1.0 乾淨，缺陷從 27.0.0 進來，30.0.1 仍在，30.1.3 已經沒有](charts/version-boundary.zh-TW.svg)
 
 ![殘留跟著文件大小走，不跟著 id 數量走](charts/scaling.zh-TW.svg)
 
@@ -71,7 +71,11 @@ row('one <div id="ad1">', await retainedPerCall(parseRepeatedly(`<body>${body()}
 | 27.0.0 | 6.90 | **181.09** | 缺陷從這裡進來 |
 | 28.1.0 | 6.88 | **189.73** | |
 | 29.1.1 | 0.11 | **161.14** | 基準被修好了，缺陷還在 |
-| 30.0.1 | 0.11 | **161.14** | 仍未修 |
+| 30.0.1 | 0.11 | **161.14** | 最後一個有問題的版本 |
+| 30.1.0 | -0.15 | 0.33 | **修好了** |
+| 30.1.3 | 0.10 | 0.37 | 乾淨 |
+
+30.1.x 兩列來自 2026-10-20 那次執行；30.1.0 只跑了 `01-minimal.mjs`，目的是找出哪一版修好的。那次執行裡，26.1.0 到 30.0.1 每一列都重現了上面的數字（差距在噪音範圍內）。
 
 **是 `id`，不是「多了一個元素」**（`02-attribute-ablation.mjs`，jsdom 30.0.1）：
 
@@ -149,13 +153,15 @@ GC roots
 
 這是一個 `id → element` 查詢快取的形狀，而它掛在 **`Window`** 層級，不是 **`Document`**層級。從那個 `Window` 解析出來的每一份 `Document`，都把自己帶 `id` 的元素塞進這個共用快取，而且永遠不會被移除。
 
-> 這是從保留路徑的形狀、加上「`id` 是唯一觸發條件」推出來的，不是逐行讀 jsdom 內部實作得到的。如果維護者看到這裡、發現真正的機制是旁邊某個東西，上面那些量測結果依然成立。
+> 寫這份報告時，機制是從保留路徑的形狀、加上「`id` 是唯一觸發條件」推出來的，不是讀 jsdom 內部實作得到的。後來上游確認了：這個快取就是 **`window` 具名存取**（`window.<id>`）背後的追蹤器，在 `lib/jsdom/living/window-properties.js`。它把共用同一個 `Window` 的**所有**文件（包括 `DOMParser` 產生的）裡帶 `id` 的元素都登記進去，只有在元素被移除時才清掉——而一份直接丟掉的文件，永遠不會觸發移除。
 
 ---
 
 ## 上游狀態
 
-這個機制在公開的 tracker 上看得到，只是換了幾種名字。沒有一個叫做「jsdom 的記憶體洩漏」：
+**jsdom 30.1.0（2026-09-17 發佈）已修好**，修正是 [jsdom#4236](https://github.com/jsdom/jsdom/pull/4236)「Scope named window properties to the associated document」（2026-08-18 合併），關掉了 [jsdom#4234](https://github.com/jsdom/jsdom/issues/4234)。那張 issue 是別人在 2026-08-12 獨立回報的，跟本 repo 實跑同一天，描述的是同一條保留路徑。30.1.0 的 release note 沒有把它寫成洩漏修正，所以只掃 changelog 看不出它已經修好；對新版跑一次重現就看得出來。
+
+在那之前，這個機制在公開的 tracker 上看得到，只是換了幾種名字。沒有一個叫做「jsdom 的記憶體洩漏」：
 
 | 回報 | 被歸類成什麼 | 狀態 |
 |---|---|---|
@@ -163,7 +169,7 @@ GC roots
 | [DOMPurify#1089](https://github.com/cure53/DOMPurify/issues/1089) | DOMPurify + jsdom 的洩漏，懷疑是 `NodeIterator` | 已關閉 |
 | [jsdom#3985](https://github.com/jsdom/jsdom/issues/3985)、[jsdom#3936](https://github.com/jsdom/jsdom/issues/3936) | 「performance regression in v27」 | 仍 open |
 
-目前唯一真的有實作的修法，是下游那個 `clearWindow()` workaround：你不主動呼叫，就照漏。
+30.1.0 之前，唯一真的有發佈的修法是下游那個 `clearWindow()` workaround：你不主動呼叫，就照漏。到 2026-10-20，jsdom 那兩張 issue 仍是 open，雖然它們描述的殘留有一部分已經修掉了。
 
 留意版本表的 29.1.1 那一列——**無 id** 的基準大幅改善，有 `id` 的情況幾乎沒動。jsdom 29.0.0 的 release note 裡有這麼一條：
 
@@ -173,9 +179,11 @@ GC roots
 
 ---
 
-## Workaround
+## 修法，以及不能升級時的 workaround
 
-快取掛在 `Window` 上，所以唯一的出口是讓 `Window` 不要活那麼久：
+**升級到 jsdom ≥ 30.1.0。** 然後拿你實際部署的版本跑一次 `01-minimal.mjs`，這是唯一可靠的確認方法。
+
+如果卡在 27～30.0.x：快取掛在 `Window` 上，所以唯一的出口是讓 `Window` 不要活那麼久：
 
 ```js
 import createDOMPurify from 'dompurify'
@@ -201,7 +209,7 @@ export const sanitize = (html) => {
 
 那個門檻要從你的平均文件大小推，不要挑一個整數。以那篇 41 KB 真實文章觀察到的每次解析約 2.7 MB 換算，500 次在重置之前就已經留下超過 1 GB。
 
-鎖 `jsdom@26.1.0` 也可以避開，代價是 27 之後的所有修正與新功能都拿不到——包括 29 那個把無 id 基準修好的效能改動。
+鎖 `jsdom@26.1.0` 也可以避開，代價是 27 之後的所有修正與新功能都拿不到。30.1.0 出來之後，已經沒什麼理由停在那裡。
 
 ---
 
@@ -271,7 +279,7 @@ RUN npm install … && npm install jsdom@${JSDOM_VERSION}   # ← 這行蓋掉 p
 `run-all.sh` 對每個版本各 build 一個 image，在裡面把所有腳本跑一遍：
 
 ```bash
-./run-all.sh                             # 26.1.0 / 27.0.0 / 28.1.0 / 29.1.1 / 30.0.1
+./run-all.sh                             # 26.1.0 / 27.0.0 / 28.1.0 / 29.1.1 / 30.0.1 / 30.1.3
 ./run-local.sh                           # 同一組矩陣，不需要 Docker
 JSDOM_VERSIONS="30.0.1" ./run-all.sh     # 單一版本
 SCRIPTS="01-minimal.mjs" ./run-all.sh    # 單一腳本
@@ -290,7 +298,7 @@ export const jsdomVersion = async () =>
 
 **該用 Docker 還是本機？** `run-all.sh` 給每個案例 4 GB 容器和 2 GB heap——留足夠餘裕，讓洩漏呈現成一條斜率，而不是量到一半就把行程撐爆，[`results/`](results/) 就是這樣跑出來的。`run-local.sh` 則是依序把每個版本裝進 `./node_modules`，跑完再還原（全程不會改寫 `package.json`）；不需要 Docker，但跑在你自己的 Node 上、沒有記憶體上限，數字會有些微飄移。
 
-**接近零的數字是噪音，而且可能是負的。** 乾淨的版本可能會印出 `-0.53 KB/call` 這種值。低於約 1 KB/call 就代表「什麼都沒留下」，那個範圍裡的正負號沒有意義。真正的訊號是 27.0.0 之後 `id` 那一欄把無 id 那一欄壓得死死的——差三個數量級，遠遠超出噪音範圍。
+**接近零的數字是噪音，而且可能是負的。** 乾淨的版本可能會印出 `-0.53 KB/call` 這種值。低於約 1 KB/call 就代表「什麼都沒留下」，那個範圍裡的正負號沒有意義。真正的訊號是 27.0.0 到 30.0.1 之間 `id` 那一欄把無 id 那一欄壓得死死的——差三個數量級，遠遠超出噪音範圍。
 
 ### 重新產生圖表
 
@@ -298,7 +306,7 @@ export const jsdomVersion = async () =>
 node charts/build.mjs
 ```
 
-只有改了 `build.mjs` 裡的數字才需要跑；commit 在 repo 裡的 SVG 已經對應 commit 的那次執行。
+只有改了 `build.mjs` 裡的數字才需要跑；commit 在 repo 裡的 SVG 已經對應 commit 的那幾次執行（2026-08-12，版本邊界圖另加 2026-10-20 的 30.1.3）。
 
 ## 檔案
 
