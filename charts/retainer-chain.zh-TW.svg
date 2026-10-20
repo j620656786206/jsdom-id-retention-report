@@ -44,6 +44,6 @@
   <line x1="134" y1="274" x2="134" y2="292" class="axis" stroke-width="2"/>
   <rect x="144" y="292" width="200" height="34" rx="6" class="accent" opacity="1"/>
   <text x="156" y="314" class="lbl s" font-weight="600">HTMLDivElementImpl</text>
-  <text x="358" y="314" class="lbl ink2">→ 拉住整份文件</text>
+  <text x="358" y="314" class="lbl ink2">→ 留住整份文件</text>
 
 </svg>

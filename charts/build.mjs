@@ -261,7 +261,7 @@ function retainer(loc) {
     ? {
         title: '為什麼收不回來', sub: '從 heap snapshot 反向走訪到 GC root',
         nodes: ['GC roots', 'Window', 'Map', 'Set', 'HTMLDivElementImpl'],
-        notes: ['', '常駐，行程活著就不會釋放', 'key 是 id 字串', '每解析一次就多一個，沒有移除路徑', '→ 拉住整份文件'],
+        notes: ['', '常駐，行程活著就不會釋放', 'key 是 id 字串', '每解析一次就多一個，沒有移除路徑', '→ 留住整份文件'],
         edge: 'WeakMap[key = Window]',
       }
     : {

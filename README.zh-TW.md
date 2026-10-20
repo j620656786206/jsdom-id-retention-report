@@ -139,7 +139,7 @@ python3 retainers.py out/leak.heapsnapshot HTMLDivElementImpl
 
 畫成形狀：
 
-![GC root 抓著 Window；以該 Window 為 key 的 WeakMap 指向一個以 id 字串為 key 的 Map，裡面的 Set 裝著帶該 id 的元素，每個元素都拉住自己那份完整文件](charts/retainer-chain.zh-TW.svg)
+![GC root 留住 Window；以該 Window 為 key 的 WeakMap 指向一個以 id 字串為 key 的 Map，裡面的 Set 裝著帶該 id 的元素，每個元素都留住自己那份完整文件](charts/retainer-chain.zh-TW.svg)
 
 ```
 GC roots
