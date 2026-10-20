@@ -159,7 +159,7 @@ GC roots
 
 ## 上游狀態
 
-**jsdom 30.1.0（2026-09-17 發佈）已修好**，修正是 [jsdom#4236](https://github.com/jsdom/jsdom/pull/4236)「Scope named window properties to the associated document」（2026-08-18 合併），關掉了 [jsdom#4234](https://github.com/jsdom/jsdom/issues/4234)。那張 issue 是別人在 2026-08-12 獨立回報的，跟本 repo 實跑同一天，描述的是同一條保留路徑。30.1.0 的 release note 沒有把它寫成洩漏修正，所以只掃 changelog 看不出它已經修好；對新版跑一次重現就看得出來。
+**jsdom 30.1.0（2026-09-17 發佈）已修好**，修正是 [jsdom#4236](https://github.com/jsdom/jsdom/pull/4236)「Scope named window properties to the associated document」（2026-08-18 合併），關掉了 [jsdom#4234](https://github.com/jsdom/jsdom/issues/4234)。那張 issue 是別人在 2026-08-12 獨立回報的，跟本 repo 實跑同一天，描述的是同一條保留路徑。[30.1.0 的 release note](https://github.com/jsdom/jsdom/releases/tag/v30.1.0) 有寫，是 67 條裡的一條：「Fixed elements in documents created with `DOMParser` or `document.implementation.createHTMLDocument()` appearing as named properties on `window` and being retained in memory.」但它沒有用「leak」也沒有提到 `id`，只掃 changelog 很難聯想到是這件事；對新版跑一次重現就看得出來。
 
 在那之前，這個機制在公開的 tracker 上看得到，只是換了幾種名字。沒有一個叫做「jsdom 的記憶體洩漏」：
 

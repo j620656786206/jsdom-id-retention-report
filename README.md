@@ -209,8 +209,11 @@ adds its id-bearing elements to the shared cache, and they are never evicted.
 properties to the associated document" (merged 2026-08-18), which closes
 [jsdom#4234](https://github.com/jsdom/jsdom/issues/4234). That issue was filed
 independently on 2026-08-12, the same day as the run in this repository, and
-describes the same retainer chain. The 30.1.0 release notes do not call it out as
-a leak fix, so a changelog skim will not tell you it is gone; running the
+describes the same retainer chain. The [30.1.0 release notes](https://github.com/jsdom/jsdom/releases/tag/v30.1.0)
+do list it, as one of 67 bullets: "Fixed elements in documents created with
+`DOMParser` or `document.implementation.createHTMLDocument()` appearing as named
+properties on `window` and being retained in memory." It does not say "leak" or
+"`id`", so a changelog skim is unlikely to connect it to this; running the
 reproduction against the new version will.
 
 Before that, the mechanism was visible in public trackers under several
