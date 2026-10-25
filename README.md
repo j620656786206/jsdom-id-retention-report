@@ -7,6 +7,10 @@
 > document.** Present from 27.0.0 through 30.0.1; **fixed in 30.1.0**
 > (2026-09-17). If you are on 27–30.0.x, upgrade.
 
+The story of how this was found in production — the crash loop, the wrong
+guesses, and how the cause was narrowed down — is written up (in Traditional
+Chinese) at [https://alexyu-blog.com/blog/20261025-jsdom-id-attribute-memory-leak](https://alexyu-blog.com/blog/20261025-jsdom-id-attribute-memory-leak).
+
 Every number below was produced by the scripts in this repository; the raw
 output of that run is committed under [`results/`](results/) — macOS,
 Node v24.13.0, Docker 29.5.2, 2026-08-12. The matrix was re-run on 2026-10-20
