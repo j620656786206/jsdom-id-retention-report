@@ -59,7 +59,7 @@ row('one <div id="ad1">', await retainedPerCall(parseRepeatedly(`<body>${body()}
 
 ![一個屬性就決定記憶體會不會 leak：jsdom 30.0.1 上四個帶 id 的案例都殘留約 157 KB，class、data-*、name 都在 0.7 KB 以下](charts/attribute-ablation.zh-TW.svg)
 
-![jsdom 26.1.0 乾淨，缺陷從 27.0.0 進來，30.0.1 仍在，30.1.3 已經沒有](charts/version-boundary.zh-TW.svg)
+![jsdom 26.1.0 乾淨，缺陷從 27.0.0 開始有，30.0.1 仍在，30.1.3 已經沒有](charts/version-boundary.zh-TW.svg)
 
 ![殘留跟著文件大小走，不跟著 id 數量走](charts/scaling.zh-TW.svg)
 
@@ -68,7 +68,7 @@ row('one <div id="ad1">', await retainedPerCall(parseRepeatedly(`<body>${body()}
 | jsdom | 無 id | 有一個 `id` | |
 |---|---:|---:|---|
 | 26.1.0 | 0.11 | 0.35 | 乾淨 |
-| 27.0.0 | 6.90 | **181.09** | 缺陷從這裡進來 |
+| 27.0.0 | 6.90 | **181.09** | 缺陷從這版開始有 |
 | 28.1.0 | 6.88 | **189.73** | |
 | 29.1.1 | 0.11 | **161.14** | 基準被修好了，缺陷還在 |
 | 30.0.1 | 0.11 | **161.14** | 最後一個有問題的版本 |

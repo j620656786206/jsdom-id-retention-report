@@ -176,7 +176,7 @@ function versions(loc) {
   })
 
   const t = loc === 'zh'
-    ? { title: '缺陷從 27 進來，30.1 修好', sub: '同一份文件解析 300 次，唯一差異是一個 id 屬性', a: '有一個 id', b: '無 id', note: '26.1.0 與 30.1.3 兩種情況都乾淨', unit: 'KB/call' }
+    ? { title: '缺陷從 27 開始有，30.1 修好', sub: '同一份文件解析 300 次，唯一差異是一個 id 屬性', a: '有一個 id', b: '無 id', note: '26.1.0 與 30.1.3 兩種情況都乾淨', unit: 'KB/call' }
     : { title: 'Introduced in 27, fixed in 30.1', sub: 'Same document parsed 300×; the only difference is one id attribute', a: 'one id', b: 'no id', note: '26.1.0 and 30.1.3 are clean in both cases', unit: 'KB/call' }
 
   let head = `  <text x="24" y="30" class="t ink">${esc(t.title)}</text>\n`

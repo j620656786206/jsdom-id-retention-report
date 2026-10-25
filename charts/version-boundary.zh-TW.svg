@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" width="760" height="400" role="img" aria-labelledby="t d">
-  <title id="t">缺陷從 27 進來，30.1 修好</title>
+  <title id="t">缺陷從 27 開始有，30.1 修好</title>
   <desc id="d">同一份文件解析 300 次，唯一差異是一個 id 屬性. jsdom 26.1.0: no id 0.11, one id 0.35; jsdom 27.0.0: no id 6.9, one id 181.09; jsdom 28.1.0: no id 6.88, one id 189.73; jsdom 29.1.1: no id 0.11, one id 161.14; jsdom 30.0.1: no id 0.11, one id 161.14; jsdom 30.1.3: no id 0.1, one id 0.37</desc>
   <style>
     .s { fill: #fcfcfb }
@@ -24,7 +24,7 @@
     }
   </style>
   <rect width="760" height="400" rx="8" class="s"/>
-  <text x="24" y="30" class="t ink">缺陷從 27 進來，30.1 修好</text>
+  <text x="24" y="30" class="t ink">缺陷從 27 開始有，30.1 修好</text>
   <text x="24" y="50" class="st ink2">同一份文件解析 300 次，唯一差異是一個 id 屬性</text>
   <rect x="546" y="22" width="10" height="10" rx="2" class="accent"/>
   <text x="561" y="31" class="lbl ink2">有一個 id</text>
