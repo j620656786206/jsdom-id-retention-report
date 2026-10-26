@@ -8,7 +8,7 @@
 
 以下每一個數字都由本 repo 的腳本實跑產生，該次執行的原始輸出 commit 在 [`results/`](results/)——macOS、Node v24.13.0、Docker 29.5.2、2026-08-12。2026-10-20 對當時最新的 30.1.3 重跑了一次矩陣，確認上游有沒有修——修好了。
 
-會不會發生，只由 `id` 屬性決定。元素種類與位置都無關；文件大小只決定**漏多少**。`class`、`data-*`，以及 `<a>` 上的 `name`，完全不會觸發。（上游的回報指出，`<img>`、`<form>`、`<iframe>` 這類元素上的 `name` 會，原因相同——見[上游狀態](#上游狀態)。）
+會不會發生，只由 `id` 屬性決定。元素種類與位置都無關；文件大小只決定**留下多少**。`class`、`data-*`，以及 `<a>` 上的 `name`，完全不會觸發。（上游的回報指出，`<img>`、`<form>`、`<iframe>` 這類元素上的 `name` 會，原因相同——見[上游狀態](#上游狀態)。）
 
 ---
 
@@ -171,7 +171,7 @@ GC roots
 | [DOMPurify#1089](https://github.com/cure53/DOMPurify/issues/1089) | DOMPurify + jsdom 的洩漏，懷疑是 `NodeIterator` | 已關閉 |
 | [jsdom#3985](https://github.com/jsdom/jsdom/issues/3985)、[jsdom#3936](https://github.com/jsdom/jsdom/issues/3936) | 「performance regression in v27」 | 仍 open |
 
-30.1.0 之前，唯一真的有發佈的修法是下游那個 `clearWindow()` workaround：你不主動呼叫，就照漏。到 2026-10-20，jsdom 那兩張 issue 仍是 open，雖然它們描述的殘留有一部分已經修掉了。
+30.1.0 之前，唯一真的有發佈的修法是下游那個 `clearWindow()` workaround：你不主動呼叫，問題就還在。到 2026-10-20，jsdom 那兩張 issue 仍是 open，雖然它們描述的殘留有一部分已經修掉了。
 
 留意版本表的 29.1.1 那一列——**無 id** 的基準大幅改善，有 `id` 的情況幾乎沒動。jsdom 29.0.0 的 release note 裡有這麼一條：
 
