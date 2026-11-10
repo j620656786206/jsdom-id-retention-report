@@ -13,18 +13,21 @@ import { fileURLToPath } from 'node:url'
 const OUT = dirname(fileURLToPath(import.meta.url))
 
 /* ------------------------------------------------------------------ tokens */
+// Colors follow the author's brand system (alexyu-blog.com, ai-context/brand-system/tokens.json):
+// one pink accent for the id-bearing case, zinc gray for context. Changed from the dataviz
+// default blue on 2026-11-09 so the figures match the blog post that links here.
 const T = {
   light: {
-    surface: '#fcfcfb', ink: '#0b0b0b', ink2: '#52514e', muted: '#898781',
-    grid: '#e1e0d9', axis: '#c3c2b7', accent: '#2a78d6', context: '#898781',
+    surface: '#ffffff', ink: '#18181b', ink2: '#52525b', muted: '#71717a',
+    grid: '#e7e5e0', axis: '#d6d3cd', accent: '#be185d', context: '#a1a1aa',
   },
   dark: {
-    surface: '#1a1a19', ink: '#ffffff', ink2: '#c3c2b7', muted: '#898781',
-    grid: '#2c2c2a', axis: '#383835', accent: '#3987e5', context: '#898781',
+    surface: '#1c1c1f', ink: '#ededef', ink2: '#a1a1aa', muted: '#8b8b93',
+    grid: '#2e2e33', axis: '#3f3f46', accent: '#ec4899', context: '#71717a',
   },
 }
 
-const FONT = 'system-ui, -apple-system, "Segoe UI", "PingFang TC", "Noto Sans TC", sans-serif'
+const FONT = '"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, -apple-system, "Segoe UI", sans-serif'
 
 /** Theme-aware style block: light values on :root, dark under both scopes. */
 const style = () => `

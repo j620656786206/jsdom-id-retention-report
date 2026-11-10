@@ -2,25 +2,25 @@
   <title id="t">One attribute decides it</title>
   <desc id="d">Retained heap per parse (KB/call), jsdom 30.0.1. + &lt;p id&gt; 158; + &lt;div id&gt; 157.5; + &lt;span id&gt; 157.4; + &lt;div id&gt; first 157.13; + class 0.68; + name 0.57; baseline (no id) 0.51; + data-* 0.41</desc>
   <style>
-    .s { fill: #fcfcfb }
-    .ink { fill: #0b0b0b }  .ink2 { fill: #52514e }
-    .muted { fill: #898781 }
-    .grid { stroke: #e1e0d9 }  .axis { stroke: #c3c2b7 }
-    .accent { fill: #2a78d6 }  .context { fill: #898781 }
-    .gap { stroke: #fcfcfb }
-    text { font-family: system-ui, -apple-system, "Segoe UI", "PingFang TC", "Noto Sans TC", sans-serif; }
+    .s { fill: #ffffff }
+    .ink { fill: #18181b }  .ink2 { fill: #52525b }
+    .muted { fill: #71717a }
+    .grid { stroke: #e7e5e0 }  .axis { stroke: #d6d3cd }
+    .accent { fill: #be185d }  .context { fill: #a1a1aa }
+    .gap { stroke: #ffffff }
+    text { font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, -apple-system, "Segoe UI", sans-serif; }
     .t   { font-size: 15px; font-weight: 600 }
     .st  { font-size: 12.5px }
     .lbl { font-size: 12px }
     .val { font-size: 12px; font-weight: 600 }
     .tick { font-size: 11px; font-variant-numeric: tabular-nums }
     @media (prefers-color-scheme: dark) {
-      .s { fill: #1a1a19 }
-      .ink { fill: #ffffff }  .ink2 { fill: #c3c2b7 }
-      .muted { fill: #898781 }
-      .grid { stroke: #2c2c2a }  .axis { stroke: #383835 }
-      .accent { fill: #3987e5 }  .context { fill: #898781 }
-      .gap { stroke: #1a1a19 }
+      .s { fill: #1c1c1f }
+      .ink { fill: #ededef }  .ink2 { fill: #a1a1aa }
+      .muted { fill: #8b8b93 }
+      .grid { stroke: #2e2e33 }  .axis { stroke: #3f3f46 }
+      .accent { fill: #ec4899 }  .context { fill: #71717a }
+      .gap { stroke: #1c1c1f }
     }
   </style>
   <rect width="760" height="400" rx="8" class="s"/>
